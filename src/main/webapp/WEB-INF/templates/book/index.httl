@@ -1,0 +1,44 @@
+$!{extends("/layout.httl")}
+<!--#macro(main)-->
+	<!--#if(books)-->
+	<div>
+	<table class="table">
+		<tr>
+			<td>序号</td>
+			<td>${"book.title".message}</td>
+			<td>作者</td>
+			<td>出版商</td>
+			<td>出版时间</td>
+			<td>定价</td>
+			<td>折扣</td>
+			<td>售价</td>
+		</tr>
+		<!--#for(Book book : books)-->
+		<tr>
+			<td>${for.count}</td>
+			<td>${book.title}</td>
+			<td>${book.author}</td>
+			<td>${book.publisher}</td>
+			<td>${book.publication}</td>
+			<td>${book.price}</td>
+			<td>${book.discount}%</td>
+			
+		</tr>
+		<!--#end--> <!-- end for -->
+	</table>
+	<!--#end--> <!-- end if -->
+	</div>
+	<hr>
+	<div align="right">
+	<a href="${BASE_PATH}/book/newPage">新增图书</a>
+	</div>
+<!--#end--> <!-- end macro -->
+
+<!-- 初始化代码  -->
+<!--#macro(script)-->
+	<script type="text/javascript">
+		$().ready(function() {
+			$("#card_id_confirm").focus();
+		});
+	</script>
+<!--#end-->

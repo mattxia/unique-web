@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>XXX系统-${title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading amazium css -->
+	<link href="${BASE_PATH}/css/amazium.css" rel="stylesheet">
+	<!-- Loading myapp css -->
+	<link href="${BASE_PATH}/css/app.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="${BASE_PATH}/js/html5shiv.js"></script>
+	  <script src="${BASE_PATH}/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  	<!-- top  -->
+    <div class="row">
+		<div class="cell12 div-top">
+			<h1>XXX系统-${title}</h1>
+			<hr>
+			<p>这是个jfinal集成 httl的demo程序, 采用修改过的amazium完成响应式布局</p>
+		</div>
+	</div>
+
+	<div class="div-sep"> </div>
+	<div class="row">
+		<!-- left  -->
+		<div class="cell3 div-left" align="center">
+			<div class="menu">
+				<div><a href="${BASE_PATH}/">主页</a></div>
+				<div><a href="${BASE_PATH}/book">图书列表</a></div>
+				<div><a href="${BASE_PATH}/book/newPage">新增图书</a></div>
+				<div><a href="#">退出</a></div>
+			</div>
+		</div>
+		<!-- msg  -->
+		<div class="cell9">
+			<!--#if(msg)-->
+				<div class="alert alert-error" align="center">
+		            <strong><span class="text-error">${msg}</span></strong>
+	          	</div>
+			<!--#end-->
+		</div>
+		<!-- main  -->
+		<div class="cell9 div-main">
+			<div>
+				<!--#macro($!main)-->
+                        Building...
+                <!--#end-->
+			</div>
+		</div>
+	</div>
+
+<div class="div-sep"> </div>
+
+	<!-- footer  -->
+	<div class="row">
+		<div class="cell12 div-footer" align="center">
+				Copyright@2013,技术支持：大飞，myaniu(at)gmail(dot)com
+		</div>
+	</div>
+
+    <!-- Load JS here for greater good =============================-->
+    <script src="${BASE_PATH}/js/jquery-1.8.3.min.js"></script>
+    <script src="${BASE_PATH}/js/app.js"></script>
+
+	<!-- 子页面需要额外添加的JS代码，或者初始化代码，这些代码需要上面的JS加载后才能执行  -->
+    <!--#macro($!script)-->
+    	<script type="text/javascript">
+          var a=1;
+         </script>
+    <!--#end-->
+  </body>
+</html>

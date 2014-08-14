@@ -1,0 +1,9 @@
+	<!--## 定义宏，可当变量或方法执行 -->
+    <!--#macro(control_text(String labelText, String idName, Object objValue, String useClass))-->
+      <div class="control-group">
+		    <label class="control-label" for="${idName}">${labelText}</label>
+		    <div class="controls">
+		      <input type="text" id="${idName}" name="${idName}" class="${useClass}" value="${objValue}" placeholder="${labelText}">
+		    </div>
+	  </div>
+    <!--#end-->

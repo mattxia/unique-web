@@ -1,0 +1,24 @@
+$!{extends("/layout.httl")}
+<!--#macro(main)-->
+	<!--#set(Book book)-->
+	<!--#if(book)-->
+			<form action="${BASE_PATH}/book/create" method="post" class="form-horizontal">
+
+	 			<div class="row">
+		 			<div class="cell7 offset1">
+		 			  	$!{control_text("书名","book.title",book.title,".input-large")}
+		 			  	$!{control_text("作者","book.author",book.author,".input-large")}
+		 			  	$!{control_text("出版社","book.publisher",book.publisher)}
+		 			  	$!{control_text("价格","book.price",book.price)}
+		 			  	$!{control_text("折扣","book.discount",book.discount)}
+					 </div>
+				 </div>
+				  <hr>
+				  <div class="row">
+					  <div class="cell7 offset1">
+							<button type="submit" class="btn btn-primary btn-large btn-block">新增图书</button>
+					  </div>
+				  </div>
+			</form>
+	<!--#end--> <!-- end if -->
+<!--#end--> <!-- end macro -->
