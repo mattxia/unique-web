@@ -119,7 +119,6 @@ public class ActionMapping {
 
                         if (!action.startsWith("/")) {
                             action = path.equals("/") ? path + action : path + "/" + action;
-                            //action = path + "/" + action;
                         }
                         Route route = new Route(actionInters, controller, path, action, method, methodType, path);
 
