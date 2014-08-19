@@ -1,8 +1,7 @@
 package org.unique.plugin.dao;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import org.unique.common.tools.CollectionUtil;
 import org.unique.common.tools.StringUtils;
@@ -14,87 +13,164 @@ import org.unique.common.tools.StringUtils;
  */
 public class SqlBase {
 
-    private String baseSql;
+private String baseSql;
+	
+	private Map<String, Object> pp;
+	
+	private static final String ORDER = "order by"; 
+	
+	public SqlBase(String baseSQL) {
+		this.baseSql = baseSQL;
+		this.pp = CollectionUtil.newHashMap();
+	}
+	
+	public SqlBase eq(String field, Object value){
+		if(StringUtils.isNotBlank(field) && null != value){
+			this.pp.put(field + " = ?", value);
+		}
+		return this;
+	}
+	
+	public SqlBase notEq(String field, Object value){
+		if(StringUtils.isNotBlank(field) && null != value){
+			this.pp.put(field + " <> ?", value);
+		}
+		return this;
+	}
+	
+	public SqlBase like(String field, Object value){
+		if(StringUtils.isNotBlank(field) && null != value){
+			this.pp.put(field + " like ?", "%" + value + "%");
+		}
+		return this;
+	}
+	
+	public SqlBase likeLeft(String field, Object value){
+		if(StringUtils.isNotBlank(field) && null != value){
+			this.pp.put(field + " like ?", "%" + value);
+		}
+		return this;
+	}
+	
+	public SqlBase likeRight(String field, Object value){
+		if(StringUtils.isNotBlank(field) && null != value){
+			this.pp.put(field + " like ?", value + "%");
+		}
+		return this;
+	}
+	
+	public SqlBase in(String field, Object... values){
+		if(null != field && null != values && values.length > 0){
+			String params = "";
+			for(Object obj : values){
+				params += obj + ",";
+			}
+			this.pp.put(field + " in ?", "(" + params.substring(0, params.length() - 1) + ")");
+		}
+		return this;
+	}
+	
+	public SqlBase notIn(String field, Object... values) {
+		if(null != field && null != values && values.length > 0){
+			String params = "";
+			for(Object obj : values){
+				params += obj + ",";
+			}
+			this.pp.put(field + " not in ?", "(" + params.substring(0, params.length() - 1) + ")");
+		}
+		return this;
+	}
+	
+	/**
+	 * >
+	 * @param field
+	 * @param value
+	 * @return
+	 */
+	public SqlBase gt(String field, Object value) {
+		if(null != field && null != value){
+			this.pp.put(field + " > ?", value);
+		}
+		return this;
+	}
+	
+	/**
+	 * >=
+	 * @param field
+	 * @param value
+	 * @return
+	 */
+	public SqlBase gte(String field, Object value) {
+		if(null != field && null != value){
+			this.pp.put(field + " >= ?", value);
+		}
+		return this;
+	}
+	
+	/**
+	 * <
+	 * @param field
+	 * @param value
+	 * @return
+	 */
+	public SqlBase lt(String field, Object value) {
+		if(null != field && null != value){
+			this.pp.put(field + " < ?", value);
+		}
+		return this;
+	}
+	
+	/**
+	 * <=
+	 * @param field
+	 * @param value
+	 * @return
+	 */
+	public SqlBase lte(String field, Object value) {
+		if(null != field && null != value){
+			this.pp.put(field + " < ?", value);
+		}
+		return this;
+	}
 
-    private StringBuffer paramSql;
+	public void order(String order) {
+		if(StringUtils.isNotBlank(order)){
+			this.pp.put(SqlBase.ORDER, order);
+		}
+	}
+	
+	public String getSQL(){
+		StringBuffer sb = new StringBuffer(this.baseSql);
+		if(!CollectionUtil.isEmpty(this.pp)){
+			sb.append(" where ");
+			for(String field : this.pp.keySet()){
+				if(!field.equals(SqlBase.ORDER)){
+					sb.append(field + " and ");
+				}
+			}
+			sb = new StringBuffer(sb.substring(0, sb.length() - 5));
+			if(this.pp.containsKey(SqlBase.ORDER)){
+				sb.append(" " + SqlBase.ORDER + " ?");
+			}
+			return sb.toString();
+		}
+		return sb.toString();
+	}
+	
+	public Object[] getParams(){
+		List<Object> params = CollectionUtil.newArrayList();
+		if(!CollectionUtil.isEmpty(this.pp)){
+			for(String field : this.pp.keySet()){
+				if(!field.equals(SqlBase.ORDER)){
+					params.add(this.pp.get(field));
+				}
+			}
+			if(this.pp.containsKey(SqlBase.ORDER)){
+				params.add(this.pp.get(SqlBase.ORDER));
+			}
+			return params.toArray();
+		}
+		return params.toArray();
+	}
 
-    private List<Object> list;
-
-    public SqlBase(String sql) {
-        this.baseSql = sql;
-        this.list = CollectionUtil.newArrayList();
-        this.paramSql = new StringBuffer();
-    }
-
-    /**
-     * 添加参数
-     * 
-     * @param sql
-     * @param param
-     */
-    public void add(String sql, Object... param) {
-        if (null != param && param.length > 0) {
-            if (isNull(param[0])) {
-                return;
-            }
-            this.paramSql.append("and " + sql);
-            if (findStrCount(sql, "\\?") == 1) {
-                this.list.add(param[0]);
-                return;
-            }
-            for (int i = 0, len = param.length; i < len; i++) {
-                if (isNotNull(param[i])) {
-                    this.list.add(param[i]);
-                }
-            }
-        }
-    }
-
-    public boolean isNotNull(Object param) {
-        if (null == param) {
-            return false;
-        }
-        if (param instanceof String) {
-            return StringUtils.isNotBlank(param.toString());
-        }
-        return null != param;
-    }
-
-    public boolean isNull(Object param) {
-        if (null == param) {
-            return true;
-        }
-        if (param instanceof String) {
-            return StringUtils.isBlank(param.toString());
-        }
-        return null == param;
-    }
-
-    public String getSQL() {
-        if (this.list.size() > 0) {
-            return this.baseSql + " where " + this.paramSql.toString().substring(4);
-        }
-        return this.baseSql;
-    }
-
-    public Object[] getParams() {
-        return this.list.toArray();
-    }
-
-    /**
-     * 查找某个keyword在srcText出现的次数
-     * 
-     * @param srcText
-     * @param keyword
-     * @return
-     */
-    private int findStrCount(String srcText, String keyword) {
-        int count = 0;
-        Pattern p = Pattern.compile(keyword);
-        Matcher m = p.matcher(srcText);
-        while (m.find()) {
-            count++;
-        }
-        return count;
-    }
 }
