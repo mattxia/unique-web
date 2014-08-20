@@ -208,9 +208,9 @@ public class SqlBase {
 		if (currentOpt == 2 && !CollectionUtil.isEmpty(this.setMap)) {
 			sb.append(" set ");
 			for (String field : this.setMap.keySet()) {
-				sb.append(field + " and ");
+				sb.append(field + ",");
 			}
-			sb = new StringBuffer(sb.substring(0, sb.length() - 5));
+			sb = new StringBuffer(sb.substring(0, sb.length() - 1));
 			StringBuffer where = new StringBuffer();
 			//update xxxx where
 			if (!CollectionUtil.isEmpty(this.whereMap)) {
@@ -282,7 +282,7 @@ public class SqlBase {
 	 * @param value
 	 * @return
 	 */
-	public SqlBase set(String field, String value) {
+	public SqlBase set(String field, Object value) {
 		if (StringUtils.isNotBlank(field) && null != value) {
 			this.setMap.put(field + " = ?", value);
 		}
@@ -297,9 +297,11 @@ public class SqlBase {
 		System.out.println("params : " + delete.getParams().length);
 
 		SqlBase update = SqlBase.update("update t_post");
-		update.set("pid", "123");
+		update.set("name", "jack");
+		update.set("last_time", 1234546);
 		update.set("is_pub", null);
-		update.likeLeft("name", null);
+		update.eq("pid", 123);
+		update.eq("is_pub", 0);
 		System.out.println("update : " + update.getSQL());
 		System.out.println("params : " + update.getParams().length);
 
