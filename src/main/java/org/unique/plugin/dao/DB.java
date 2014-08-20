@@ -128,7 +128,7 @@ public class DB {
      * @param params
      * @return
      */
-    public static <T> List<T> findList(Class<T> clazz, Integer page, Integer pageSize, String sql, Object... params) {
+    public static <T> List<T> findListPage(Class<T> clazz, Integer page, Integer pageSize, String sql, Object... params) {
         List<T> entityList;
         try {
             sql = sql + " LIMIT ?,?";
