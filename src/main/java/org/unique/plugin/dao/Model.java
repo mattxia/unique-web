@@ -37,8 +37,8 @@ public class Model<M extends Model<?>> implements Serializable {
         return (List<M>) DB.findList(this.getClass(), sql, params);
     }
     
-    public List<M> findListPage(int page, int pageSize, String sql, Object... params) {
-        return (List<M>) DB.findListPage(this.getClass(), page, pageSize, sql, params);
+    public Page<M> findListPage(int page, int pageSize, String sql, Object... params) {
+        return (Page<M>) DB.findListPage(this.getClass(), page, pageSize, sql, params);
     }
 
     public List<Map<String, Object>> findMapList(String sql, Object... params) {

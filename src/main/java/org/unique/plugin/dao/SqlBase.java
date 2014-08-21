@@ -33,8 +33,8 @@ public class SqlBase {
 	/*
 	 * order by 常量 
 	 */
-	private static final String ORDER = "order by";
-
+	private String orderBy = null;
+	
 	private SqlBase() {
 	}
 
@@ -183,8 +183,8 @@ public class SqlBase {
 	}
 
 	public void order(String order) {
-		if (StringUtils.isNotBlank(order)) {
-			this.whereMap.put(SqlBase.ORDER, order);
+		if (StringUtils.isNotBlank(order) && !order.contains("null")) {
+			this.orderBy = "order by " + order;
 		}
 	}
 
@@ -192,15 +192,19 @@ public class SqlBase {
 		StringBuffer sb = new StringBuffer(this.baseSql);
 		//查询语句生成
 		if (currentOpt == 1) {
-			sb.append(" where ");
-			for (String field : this.whereMap.keySet()) {
-				if (!field.equals(SqlBase.ORDER)) {
+			
+			if(this.whereMap.size() > 0){
+				sb.append(" where ");
+				for (String field : this.whereMap.keySet()) {
 					sb.append(field + " and ");
 				}
 			}
-			sb = new StringBuffer(sb.substring(0, sb.length() - 6));
-			if (this.whereMap.containsKey(SqlBase.ORDER)) {
-				sb.append(" " + SqlBase.ORDER + " ?");
+			int pos = sb.lastIndexOf("and");
+			if(pos != -1){
+				sb = new StringBuffer(sb.substring(0, pos - 1));
+			}
+			if (StringUtils.isNotBlank(this.orderBy)) {
+				sb.append(" " + this.orderBy + " ");
 			}
 			return sb.toString();
 		}
@@ -240,12 +244,7 @@ public class SqlBase {
 		if (currentOpt == 1) {
 			if (!CollectionUtil.isEmpty(this.whereMap)) {
 				for (String field : this.whereMap.keySet()) {
-					if (!field.equals(SqlBase.ORDER)) {
-						params.add(this.whereMap.get(field));
-					}
-				}
-				if (this.whereMap.containsKey(SqlBase.ORDER)) {
-					params.add(this.whereMap.get(SqlBase.ORDER));
+					params.add(this.whereMap.get(field));
 				}
 			}
 			return params.toArray();

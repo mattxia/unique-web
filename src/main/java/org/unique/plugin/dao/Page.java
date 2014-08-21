@@ -1,193 +1,181 @@
 package org.unique.plugin.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * //TODO 分页model
- * 
- * @author rex
+ * 分页model
+ * @author:rex
+ * @date:2014年8月21日
+ * @version:1.0
  */
 @SuppressWarnings("hiding")
 public class Page<Model> {
 
-    /**
-     * 对象总数量
-     */
-    private int totalCount;
+	/*
+	 * 当前页
+	 */
+	private Integer page;
+	/*
+	 * 查询起点
+	 */
+	private Integer startIndex;
+	/*
+	 * 每页条数
+	 */
+	private Integer pageSize;
+	/*
+	 * 总页数
+	 */
+	private Integer totalPage;
+	/*
+	 * 总记录数
+	 */
+	private Long totalCount;
+	/*
+	 * 上一页
+	 */
+	private Integer prev_page;
+	/*
+	 * 下一页
+	 */
+	private Integer next_page;
+	/*
+	 * 首页
+	 */
+	private Integer home_page;
+	/*
+	 * 尾页
+	 */
+	private Integer last_page;
+	/*
+	 * 固定导航数
+	 */
+	private Integer navNum;
+	/*
+	 * 数据集
+	 */
+	private List<Model> results;
 
-    /**
-     * 每页的数据列表
-     */
-    private List<Model> result = new ArrayList<Model>();
+	/**
+	 * @param totleCount 	总记录数
+	 * @param page			当前第几页
+	 * @param pageSize	 	每页显示条数
+	 */
+	public Page(Long totleCount, Integer page, Integer pageSize) {
+		
+		this.page = page;
+		
+		this.pageSize = pageSize;
+		
+		//总条数
+		this.totalCount = totleCount;
+		
+		//总页数
+		this.totalPage = (int) (totleCount / pageSize);
 
+		//起始位置
+		this.startIndex = Math.max(0, (this.page - 1) * pageSize);
+		
+		//首页
+		this.home_page = 1;
+		
+		//尾页
+		this.last_page = this.totalPage;
+		
+		//上一页
+		this.prev_page = Math.max(this.page - 1, home_page);
 
-    /**
-     * 根据直接提供的记录开始位置创建分页对象
-     *
-     * @param start
-     * @param limit
-     * @param <T>
-     * @return
-     */
-    public static <T> Page<T> createFromStart(int start, int limit) {
-        return new Page<T>(start / limit + 1, limit);
-    }
+		//下一页
+		this.next_page = Math.min(this.page + 1, last_page);
 
+	}
 
-    public Page(int pageNo, int pageSize) {
-        this.setPageNo(pageNo);
-        this.setPageSize(pageSize);
-    }
+	public Integer getPage() {
+		return page;
+	}
 
-    public Page(int pageNo) {
-        this.setPageNo(pageNo);
-        this.pageSize = DEFAULT_PAGE_SIZE;
-    }
+	public void setPage(Integer page) {
+		this.page = page;
+	}
 
-    public Page() {
-        this.pageNo = DEFAULT_PAGE_NO;
-        this.pageSize = DEFAULT_PAGE_SIZE;
-    }
+	public Integer getPageSize() {
+		return pageSize;
+	}
 
-    // 总页数，这个是根据totalcount和pageSize计算的
-    public int getTotalPages() {
-        if (totalCount == 0)
-            return 0;
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
 
-        int count = totalCount / pageSize;
-        if (totalCount % pageSize > 0) {
-            count++;
-        }
-        return count;
-    }
+	public Integer getStartIndex() {
+		return startIndex;
+	}
 
-    /**
-     * 是否还有下一页.
-     */
-    public boolean isHasNext() {
-        return (pageNo + 1 <= getTotalPages());
-    }
+	public void setStartIndex(Integer startIndex) {
+		this.startIndex = startIndex;
+	}
 
-    /**
-     * 返回下页的页号,序号从1开始.
-     */
-    public int getNextPage() {
-        if (isHasNext())
-            return pageNo + 1;
-        else
-            return pageNo;
-    }
+	public Integer getTotalPage() {
+		return totalPage;
+	}
 
-    /**
-     * 是否还有上一页.
-     */
-    public boolean isHasPre() {
-        return (pageNo - 1 >= 1);
-    }
+	public void setTotalPage(Integer totalPage) {
+		this.totalPage = totalPage;
+	}
 
-    /**
-     * 返回上页的页号,序号从1开始.
-     */
-    public int getPrePage() {
-        if (isHasPre())
-            return pageNo - 1;
-        else
-            return pageNo;
-    }
+	public Long getTotalCount() {
+		return totalCount;
+	}
 
+	public void setTotalCount(Long totalCount) {
+		this.totalCount = totalCount;
+	}
 
+	public Integer getPrev_page() {
+		return prev_page;
+	}
 
-    /**
-     * @return the totalCount
-     */
-    public int getTotalCount() {
-        return totalCount;
-    }
+	public void setPrev_page(Integer prev_page) {
+		this.prev_page = prev_page;
+	}
 
-    /**
-     * @param totalCount the totalCount to set
-     */
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
-    }
+	public Integer getNext_page() {
+		return next_page;
+	}
 
-    /**
-     * @return the result
-     */
-    public List<Model> getResult() {
-        if (result == null)
-            return new ArrayList<Model>();
-        return result;
-    }
+	public void setNext_page(Integer next_page) {
+		this.next_page = next_page;
+	}
 
-    /**
-     * @param result the result to set
-     */
-    public void setResult(List<Model> result) {
-        this.result = result;
-    }
-    
-    static int DEFAULT_PAGE_SIZE = 15;
+	public Integer getHome_page() {
+		return home_page;
+	}
 
-    static int DEFAULT_PAGE_NO = 1;
+	public void setHome_page(Integer home_page) {
+		this.home_page = home_page;
+	}
 
-    /**
-     * 第几页
-     */
-    protected int pageNo = DEFAULT_PAGE_NO;
+	public Integer getLast_page() {
+		return last_page;
+	}
 
-    /**
-     * 每页显示对象个数
-     */
-    protected int pageSize = DEFAULT_PAGE_SIZE;
+	public void setLast_page(Integer last_page) {
+		this.last_page = last_page;
+	}
 
+	public List<Model> getResults() {
+		return results;
+	}
 
-    // 每页的第一条记录在结果集中的位置
-    public int getPageFirst() {
-        return ((pageNo - 1) * pageSize);
-    }
+	public void setResults(List<Model> results) {
+		this.results = results;
+	}
 
-    //和上面方法一样
-    public int getStart() {
-        return getPageFirst();
-    }
+	public Integer getNavNum() {
+		return navNum;
+	}
 
-    //和getPageSize一样
-    public int getLimit() {
-        return pageSize;
-    }
+	public void setNavNum(Integer navNum) {
+		this.navNum = navNum;
+	}
 
-
-    /**
-     * @return the pageNo
-     */
-    public int getPageNo() {
-        return pageNo;
-    }
-
-    /**
-     * @param pageNo the pageNo to set
-     */
-    public void setPageNo(int pageNo) {
-        if (pageNo > 0) {
-            this.pageNo = pageNo;
-        }
-    }
-
-    /**
-     * @return the pageSize
-     */
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    /**
-     * @param pageSize the pageSize to set
-     */
-    public void setPageSize(int pageSize) {
-        if (pageSize > 0) {
-            this.pageSize = pageSize;
-        }
-    }
 }

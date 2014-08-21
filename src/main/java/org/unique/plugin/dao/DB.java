@@ -128,24 +128,27 @@ public class DB {
      * @param params
      * @return
      */
-    public static <T> List<T> findListPage(Class<T> clazz, Integer page, Integer pageSize, String sql, Object... params) {
-        List<T> entityList;
+    public static <T> Page<T> findListPage(Class<T> clazz, Integer page, Integer pageSize, String sql, Object... params) {
+    	//查询总记录数
+        Long totleCount = findColumn("select count(1) " + sql.substring(sql.indexOf("from")), params) ;
+        Page<T> pageModel = new Page<T>(totleCount, page, pageSize);
         try {
             sql = sql + " LIMIT ?,?";
             List<Object> list = Arrays.asList(params);
             if (null == params || params.length < 1) {
                 list = CollectionUtil.newArrayList();
             }
-            list.add(page);
-            list.add(pageSize);
+            list.add(pageModel.getStartIndex());
+            list.add(pageModel.getPageSize());
             params = list.toArray();
-            entityList = getQueryRunner().query(sql, new BeanListHandler<T>(clazz), params);
+            List<T> entityList = getQueryRunner().query(sql, new BeanListHandler<T>(clazz), params);
+            pageModel.setResults(entityList);
         } catch (SQLException e) {
             logger.error("queryModelList.分页查询实体列表出错：" + sql, e);
             throw new QueryException(e);
         }
         logger.debug("sql：" + sql + "\n  params：" + Arrays.toString(params));
-        return entityList;
+        return pageModel;
     }
 
     /**

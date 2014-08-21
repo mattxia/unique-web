@@ -33,5 +33,6 @@ public class SqlBaseTest {
 		System.out.println("select : " + select.getSQL());
 		System.out.println("params : " + select.getParams().length);
 		
+		
 	}
 }
