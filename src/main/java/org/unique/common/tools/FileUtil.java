@@ -29,7 +29,7 @@ import java.util.List;
  * @date:2014年8月14日
  * @version:1.0
  */
-public class FileUti {
+public class FileUtil {
 
     public static final int BUFFER_SIZE = 4096;
 
@@ -281,7 +281,7 @@ public class FileUti {
     public static InputStream getInputStream(String file) throws FileNotFoundException {
         InputStream inputStream = null;
         if (file.startsWith("classpath:")) {
-            inputStream = FileUti.class.getClassLoader().getResourceAsStream(file.substring("classpath:".length()));
+            inputStream = FileUtil.class.getClassLoader().getResourceAsStream(file.substring("classpath:".length()));
         } else {
             inputStream = new FileInputStream(file);
         }
@@ -302,7 +302,7 @@ public class FileUti {
     }
 
     public static File getFileByClassLoader(String resourceName) throws IOException {
-        Enumeration<URL> urls = FileUti.class.getClassLoader().getResources(resourceName);
+        Enumeration<URL> urls = FileUtil.class.getClassLoader().getResources(resourceName);
         while (urls.hasMoreElements()) {
             return new File(urls.nextElement().getFile());
         }
