@@ -1,6 +1,7 @@
 package org.unique.web.core;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -96,6 +97,10 @@ public class ActionMapping {
             }
             // 遍历method
             for (Method method : methods) {
+            	// 非public不作为action处理
+            	if(method.getModifiers() != Modifier.PUBLIC){
+            		continue;
+            	}
                 String methodName = method.getName();
                 // 过滤controller顶层方法
                 if (!excludedMethodName.contains(methodName) && method.getParameterTypes().length == 0) {
