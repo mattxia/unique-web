@@ -7,9 +7,10 @@ import org.unique.common.tools.CollectionUtil;
 import org.unique.common.tools.StringUtils;
 
 /**
- * 生成sql类
- * 
- * @author rex
+ * sql util
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public class SqlBase {
 

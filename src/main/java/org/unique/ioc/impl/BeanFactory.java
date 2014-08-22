@@ -6,11 +6,10 @@ import org.unique.ioc.BeanType;
 import org.unique.ioc.Container;
 
 /**
- * 获取bean的工厂
- * 
- * @author：rex
- * @create_time：2014-6-26
- * @version：V1.0
+ * beanfactory
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 @SuppressWarnings("unchecked")
 public class BeanFactory {

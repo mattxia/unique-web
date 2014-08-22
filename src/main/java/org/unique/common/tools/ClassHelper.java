@@ -11,9 +11,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
- * 类加载工具类
+ * load class tool
  * @author:rex
- * @date:2014年8月14日
+ * @date:2014年6月22日
  * @version:1.0
  */
 public class ClassHelper {

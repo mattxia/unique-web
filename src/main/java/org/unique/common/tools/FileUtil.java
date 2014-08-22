@@ -24,9 +24,9 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * 文件工具类
+ * file util
  * @author:rex
- * @date:2014年8月14日
+ * @date:2014年8月22日
  * @version:1.0
  */
 public class FileUtil {
@@ -426,5 +426,45 @@ public class FileUtil {
                 throw new IOException(message);
             }
         }
+    }
+    
+    /**
+     * 判断文件是否存在
+     * 
+     * @param filePath
+     * @return
+     */
+    public static boolean exists(String filePath) {
+        return new File(filePath).exists();
+    }
+
+    /**
+     * 获取文件后缀
+     * 
+     * @param fileName
+     * @return
+     */
+    public static String getSuffix(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    /**
+     * 获取文件名
+     * 
+     * @param filePath
+     * @return
+     */
+    public static String getFileName(String filePath) {
+        return filePath.substring(filePath.lastIndexOf("/") + 1);
+    }
+
+    /**
+     * 获取文件不带后缀的全路径
+     * 
+     * @param filePath
+     * @return
+     */
+    public static String getNoSuffixFilePath(String filePath) {
+        return filePath.substring(0, filePath.lastIndexOf("."));
     }
 }

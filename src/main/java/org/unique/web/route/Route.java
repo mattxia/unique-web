@@ -7,8 +7,10 @@ import org.unique.web.core.Controller;
 import org.unique.web.interceptor.Interceptor;
 
 /**
- * 动作对象
- * @author：rex
+ * route
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public class Route {
 

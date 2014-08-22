@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * //TODO 操作redis
- * 
- * @author rex
+ * redis api
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public interface Cache extends Serializable {
 

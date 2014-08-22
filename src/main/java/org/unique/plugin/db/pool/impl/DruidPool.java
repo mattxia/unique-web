@@ -8,16 +8,17 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.unique.common.tools.IOUtil;
-import org.unique.plugin.db.pool.DBPoolFactory;
+import org.unique.plugin.db.pool.DBPool;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 /**
- * //TODO druid实现
- * 
- * @author renqi
+ * druid impl
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
-public class DruidPool implements DBPoolFactory {
+public class DruidPool implements DBPool {
 
     private static Logger logger = Logger.getLogger(DruidPool.class);
 

@@ -6,9 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 自动装配 可指定默认实现类
- * 
- * @author：rex
+ * autowited annotation
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

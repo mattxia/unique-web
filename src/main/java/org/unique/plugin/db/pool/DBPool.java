@@ -3,11 +3,12 @@ package org.unique.plugin.db.pool;
 import javax.sql.DataSource;
 
 /**
- * 
- * //TODO 数据源工厂
- * @author renqi
+ * db pool
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
-public interface DBPoolFactory {
+public interface DBPool{
 
     DataSource getDataSource();
     

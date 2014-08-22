@@ -4,9 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 路由适配器
- * 
- * @author rex
+ * route matcher
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public final class RouteMatcher {
 

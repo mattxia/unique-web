@@ -8,16 +8,17 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.unique.common.tools.IOUtil;
-import org.unique.plugin.db.pool.DBPoolFactory;
+import org.unique.plugin.db.pool.DBPool;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 /**
- * //TODO dbcp实现
- * 
- * @author renqi
+ * c3p0 impl
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
-public class C3p0Pool implements DBPoolFactory {
+public class C3p0Pool implements DBPool {
 
     private static Logger logger = Logger.getLogger(C3p0Pool.class);
 

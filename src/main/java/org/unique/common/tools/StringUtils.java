@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 字符串操作类
+ * String Util
  * @author:rex
- * @date:2014年8月14日
+ * @date:2014年8月22日
  * @version:1.0
  */
 public class StringUtils {

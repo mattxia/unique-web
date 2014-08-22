@@ -5,6 +5,12 @@ import java.util.Random;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
+/**
+ * redis lock
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
+ */
 public class RedisLock {
 
     /** 加锁标志 */

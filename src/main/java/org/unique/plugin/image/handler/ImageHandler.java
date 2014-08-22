@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.unique.common.tools.FileUtil;
 import org.unique.common.tools.JSONUtil;
 import org.unique.plugin.image.Const;
 import org.unique.plugin.image.exec.ThumbExec;
 import org.unique.plugin.image.util.BigDecimalUtil;
-import org.unique.plugin.image.util.FileUtil;
 import org.unique.plugin.image.util.ImageUtil;
 import org.unique.plugin.image.util.QueryUtil;
 
@@ -91,14 +91,14 @@ public class ImageHandler {
                 String[] size = params.get("s").split("x");
                 width = Integer.valueOf(size[0]);
                 height = Integer.valueOf(size[1]);
-                thumbPath = FileUtil.getImgPath(filePath, width, height, quality, scale, rotate);
+                thumbPath = ImageUtil.getImgPath(filePath, width, height, quality, scale, rotate);
                 thumbPath = ThumbExec.thumb(filePath, thumbPath, width, height, scale, quality, rotate);
             }
 
             // 按比例
             if (null != params.get("p")) {
                 scale = BigDecimalUtil.divide(new BigDecimal(params.get("p")), new BigDecimal("100"), 10).doubleValue();
-                thumbPath = FileUtil.getImgPath(filePath, width, height, quality, scale, rotate);
+                thumbPath = ImageUtil.getImgPath(filePath, width, height, quality, scale, rotate);
                 thumbPath = ThumbExec.thumb(filePath, thumbPath, width, height, scale, quality, rotate);
             }
             // 缩略图显示

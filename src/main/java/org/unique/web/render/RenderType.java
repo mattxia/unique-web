@@ -1,9 +1,10 @@
 package org.unique.web.render;
 
 /**
- * 视图类型
- * @author rex
- *
+ * render type
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public enum RenderType {
 	JSP,

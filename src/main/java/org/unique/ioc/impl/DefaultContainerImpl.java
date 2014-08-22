@@ -17,9 +17,10 @@ import org.unique.ioc.annotation.Service;
 import org.unique.web.annotation.Path;
 
 /**
- * 默认的bean工厂实现
- * 
- * @author：rex
+ * default beanfactory impl
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public class DefaultContainerImpl implements Container {
 

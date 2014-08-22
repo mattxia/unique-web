@@ -6,9 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 组件类型 component 一定是个非抽象，接口的类
- * 
- * @author rex
+ * component annotation
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

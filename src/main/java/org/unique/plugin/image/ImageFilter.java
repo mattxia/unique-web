@@ -13,8 +13,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.unique.common.tools.FileUtil;
 import org.unique.plugin.image.handler.ImageHandler;
-import org.unique.plugin.image.util.FileUtil;
 
 /**
  * 图片处理核心过滤器

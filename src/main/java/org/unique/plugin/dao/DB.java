@@ -25,16 +25,17 @@ import org.unique.common.tools.CollectionUtil;
 import org.unique.ioc.annotation.Component;
 import org.unique.plugin.db.exception.QueryException;
 import org.unique.plugin.db.exception.UpdateException;
-import org.unique.plugin.db.pool.DBPoolFactory;
-import org.unique.plugin.db.pool.POOL;
+import org.unique.plugin.db.pool.DBPool;
+import org.unique.plugin.db.pool.PoolType;
 import org.unique.plugin.db.pool.impl.C3p0Pool;
 import org.unique.plugin.db.pool.impl.DruidPool;
 import org.unique.web.core.Const;
 
 /**
- * //TODO 数据库操作类
- * 
- * @author rex
+ * db exec class
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 @Component
 public class DB {
@@ -42,12 +43,12 @@ public class DB {
     private static final Logger logger = Logger.getLogger(DB.class);
 
     // 数据源工厂
-    private static DBPoolFactory dsFactory;
+    private static DBPool dsFactory;
     
     static {
-        if (Const.POOL_TYPE.equalsIgnoreCase(POOL.DRUID.toString())) {
+        if (Const.POOL_TYPE.equalsIgnoreCase(PoolType.DRUID.toString())) {
             dsFactory = DruidPool.getInstance();
-        } else if (Const.POOL_TYPE.equalsIgnoreCase(POOL.C3P0.toString())) {
+        } else if (Const.POOL_TYPE.equalsIgnoreCase(PoolType.C3P0.toString())) {
             dsFactory = C3p0Pool.getInstance();
         } else {
             dsFactory = DruidPool.getInstance();

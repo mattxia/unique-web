@@ -11,9 +11,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
- * properties文件工具类
+ * properties file util
  * @author:rex
- * @date:2014年8月14日
+ * @date:2014年8月22日
  * @version:1.0
  */
 public class PropUtil {

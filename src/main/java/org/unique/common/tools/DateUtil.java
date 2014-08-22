@@ -10,9 +10,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * 日期工具类
+ * date util
  * @author:rex
- * @date:2014年8月14日
+ * @date:2014年8月22日
  * @version:1.0
  */
 public class DateUtil {

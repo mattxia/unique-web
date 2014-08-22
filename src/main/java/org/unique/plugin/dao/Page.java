@@ -3,7 +3,7 @@ package org.unique.plugin.dao;
 import java.util.List;
 
 /**
- * 分页model
+ * page model
  * @author:rex
  * @date:2014年8月21日
  * @version:1.0

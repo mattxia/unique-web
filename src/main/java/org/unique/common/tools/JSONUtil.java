@@ -7,9 +7,9 @@ import java.util.Map;
 import com.alibaba.fastjson.JSON;
 
 /**
- * json工具类
+ * json util
  * @author:rex
- * @date:2014年8月14日
+ * @date:2014年8月22日
  * @version:1.0
  */
 @SuppressWarnings("unchecked")
