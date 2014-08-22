@@ -8,22 +8,25 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.unique.util.WebUtil;
 import org.unique.web.handler.Handler;
+import org.unique.web.util.WebUtil;
 
 /**
- * mvc核心过滤器
- * 
- * @author：rex
+ * mvc core filter
  */
+@WebFilter(urlPatterns = {"/*"}, 
+asyncSupported = true,
+initParams = {@WebInitParam(name="configPath",value="config.properties")})
 public class Dispatcher implements Filter {
-
+	
     private Logger logger = Logger.getLogger(Dispatcher.class);
-
+    
     private static Unique unique = Unique.single();
 
     private Handler handler;
@@ -31,17 +34,15 @@ public class Dispatcher implements Filter {
     private int contextPathLength;
 
     /**
-     * 初始化配置
-     * 
-     * @author：rex
+     * init
      */
     public void init(FilterConfig config) {
 
-        // 配置参数
+        // config path
         Const.CONFIG_PATH = config.getInitParameter("configPath");
         ActionContext.single().setActionContext(config.getServletContext());
 
-        // 初始化web
+        // init web
         unique.init();
 
         handler = unique.getHandler();
@@ -58,26 +59,31 @@ public class Dispatcher implements Filter {
      * @author：rex
      */
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
+        
+    	HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+        
         String target = request.getRequestURI().replaceFirst(request.getContextPath(), "");
         target = WebUtil.getRelativePath(request, "");
+        
         if (contextPathLength != 0) {
             target = request.getRequestURI().substring(contextPathLength);
         }
+        
         if(target.endsWith(Const.URL_EXT)){
             target = target.substring(0, target.indexOf(Const.URL_EXT));
         }
+        
+        // set reqest and response
         ActionContext.single().setActionContext(request, response);
+        
         if (!handler.handle(target, request, response)) {
             chain.doFilter(request, response);
         }
     }
 
     /**
-     * 销毁
-     * 
-     * @author：rex
+     * destroy
      */
     public void destroy() {
         if (null != unique) {

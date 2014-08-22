@@ -1,15 +1,14 @@
-package org.unique.util;
+package org.unique.web.util;
 
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 系统路径工具类
- * 
- * @author：rex
- * @create_time：2014-6-19 下午6:40:53
- * @version：V1.0
+ * system path tools
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public final class WebUtil {
 

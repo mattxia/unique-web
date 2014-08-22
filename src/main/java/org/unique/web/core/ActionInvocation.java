@@ -7,11 +7,10 @@ import org.unique.web.interceptor.Interceptor;
 import org.unique.web.route.Route;
 
 /**
- * action执行器
- * 
- * @author：rex
- * @create_time：2014-6-24 上午11:40:27
- * @version：V1.0
+ * actionInvocation
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public class ActionInvocation {
 

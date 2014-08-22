@@ -12,7 +12,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.unique.common.tools.PropUtil;
-import org.unique.util.SerializeUtil;
+import org.unique.web.util.SerializeUtil;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;

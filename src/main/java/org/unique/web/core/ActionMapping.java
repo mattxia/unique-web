@@ -19,22 +19,23 @@ import org.unique.web.route.Route;
 import org.unique.web.route.RouteMatcher;
 
 /**
- * 动作映射器
- * 
- * @author rex
+ * actionMapping
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public class ActionMapping {
 
     private static Logger logger = Logger.getLogger(ActionMapping.class);
 
-    // 保存扫描到的所有路由配置
+    // route mapping
     private Map<RouteMatcher, Route> urlMapping = CollectionUtil.newHashMap();
 
     // private static Logger log = Logger.getLogger(ActionMapping.class);
     private static final String SLASH = "/";
 
     private Interceptor[] interceptors;
-
+    
     private ActionMapping() {
     }
 
@@ -48,9 +49,7 @@ public class ActionMapping {
     }
 
     /**
-     * 自定义公共方法
-     * 
-     * @author：rex
+     * the custom method
      * @return
      */
     private static Set<String> buildExcludedMethodName() {
@@ -63,25 +62,21 @@ public class ActionMapping {
     }
 
     /**
-     * 构建路由map
-     * 
-     * @author：rex
-     * @param pack
-     * @return
+     * build routing mapping
      */
     public void buildActionMapping() {
         urlMapping.clear();
 
-        // 要过滤的方法
+        // to filter method
         Set<String> excludedMethodName = buildExcludedMethodName();
-        // 所有控制器
+        // all controller
         Set<Entry<String, Class<? extends Controller>>> entrySet = Unique.single().controllerMap.entrySet();
 
         InterceptorFactory factory = InterceptorFactoryBuilder.buildInterceptorFactory();
         this.interceptors = factory.getDefaultInterceptors();
         factory.addToInterceptorsMap(interceptors);
 
-        // 遍历controller
+        // for controller
         for (Entry<String, Class<? extends Controller>> entry : entrySet) {
             // controller
             Class<? extends Controller> controller = entry.getValue();
@@ -95,19 +90,19 @@ public class ActionMapping {
                 Path annotation = controller.getAnnotation(Path.class);
                 path = annotation.value();
             }
-            // 遍历method
+            // for method
             for (Method method : methods) {
-            	// 非public不作为action处理
+            	// non-public not as action to deal with
             	if(method.getModifiers() != Modifier.PUBLIC){
             		continue;
             	}
                 String methodName = method.getName();
-                // 过滤controller顶层方法
+                // filter the top controller method
                 if (!excludedMethodName.contains(methodName) && method.getParameterTypes().length == 0) {
                     Interceptor[] methodInters = factory.getMethodInterceptors(method);
                     Interceptor[] actionInters = factory.getActionInterceptors(interceptors, controllerInters, controller, methodInters, method);
                     
-                    // 获取路由
+                    // get action
                     Action ak = method.getAnnotation(Action.class);
                     RouteMatcher mac = null;
                     if (null != ak) {
@@ -166,7 +161,7 @@ public class ActionMapping {
             if (url.equals("") || url.equals("/") || url.equals("/index/") ) {
                 url = "/index";
             }
-            // 解析url中所有参数
+            // parse url parameters
             for (RouteMatcher matcher : this.urlMapping.keySet()) {
                 String[] params = matcher.getUrlParameters(url);
                 if (params != null) {

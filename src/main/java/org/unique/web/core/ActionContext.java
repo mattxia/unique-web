@@ -5,12 +5,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.unique.util.WebUtil;
+import org.unique.web.util.WebUtil;
 
 /**
- * 用threadLocal存储上下文对象
- * @author rex
- *
+ * threadloacal context
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public final class ActionContext {
 

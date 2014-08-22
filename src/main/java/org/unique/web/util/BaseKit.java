@@ -1,4 +1,4 @@
-package org.unique.util;
+package org.unique.web.util;
 
 import java.io.Serializable;
 

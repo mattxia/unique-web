@@ -8,8 +8,8 @@ import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
-import org.unique.util.BaseKit;
 import org.unique.web.core.Const;
+import org.unique.web.util.BaseKit;
 
 /**
  * base model

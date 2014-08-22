@@ -7,10 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 控制器上的path
- * @author：rex
- * @create_time：2014-6-20 下午2:58:21  
- * @version：V1.0
+ * the path of the controller
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

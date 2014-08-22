@@ -15,9 +15,10 @@ import org.unique.web.handler.Handler;
 import org.unique.web.handler.impl.DefalutHandlerImpl;
 
 /**
- * @author：rex
- * @create_time：2014-6-24 下午1:23:55
- * @version：V1.0
+ * unique
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 public class Unique {
 
@@ -29,10 +30,10 @@ public class Unique {
 
     private ActionMapping actionMapping = ActionMapping.single();
 
-    // IOC容器
+    // ioc container
     private Container container;
 
-    // 存放控制器
+    // controller map
     public final Map<String, Class<? extends Controller>> controllerMap = CollectionUtil.newConcurrentHashMap();
 
     private Unique() {
@@ -49,18 +50,18 @@ public class Unique {
 
     void init() {
 
-        // 初始化常量参数
+        // init const config
         Const.init();
 
-        // 初始化IOC容器
+        // init container
         initIOC();
 
-        logger.debug("beans : " + container.getBeanMap());
+        logger.info("beans : " + container.getBeanMap());
 
-        // 初始化actionMapping
+        // init actionMapping
         initActionMapping();
 
-        // 初始化处理器
+        // init handler
         initHandler();
     }
 
@@ -70,12 +71,10 @@ public class Unique {
         loadClasses();
     }
 
-    // 初始化handler
     private void initHandler() {
         handler = new DefalutHandlerImpl();
     }
 
-    // 初始化actionMapping
     private void initActionMapping() {
         actionMapping.buildActionMapping();
     }
@@ -106,7 +105,7 @@ public class Unique {
         }
         Set<Class<?>> classes = ClassHelper.scanPackage(pack);
         for (Class<?> clazz : classes) {
-            // 控制器
+            // determine whether the controller
             if (null != clazz.getSuperclass() && clazz.getSuperclass().equals(Controller.class)) {
                 Path path = clazz.getAnnotation(Path.class);
                 if (null == path) {
@@ -117,14 +116,13 @@ public class Unique {
             }
 
             if (container.isRegister(clazz.getAnnotations())) {
-                // 将扫描到的对象保存到容器中
+                // scan the class to container
                 container.registBean(clazz);
             }
         }
-        //注册框架对象
+        //register jediscache class to container
         container.registBean(JedisCache.class);
-        container.registBean(JedisCache.class);
-        // 初始化注入
+        // init wired
         container.initWired();
     }
 

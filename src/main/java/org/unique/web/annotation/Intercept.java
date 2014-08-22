@@ -10,10 +10,10 @@ import org.unique.web.interceptor.Interceptor;
 
 
 /**
- * 执行前拦截
- * @author：rex
- * @create_time：2014-6-25 上午10:32:02  
- * @version：V1.0
+ * intercept
+ * @author:rex
+ * @date:2014年8月22日
+ * @version:1.0
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

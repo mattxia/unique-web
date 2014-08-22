@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.unique.util.SerializeUtil;
+import org.unique.web.util.SerializeUtil;
 
 /**
  * jedis tool

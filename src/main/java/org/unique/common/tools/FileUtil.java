@@ -323,7 +323,7 @@ public class FileUtil {
         if (index == -1) {
             return "";
         } else {
-            return filename.substring(index + 1);
+            return filename.substring(index);
         }
     }
 
