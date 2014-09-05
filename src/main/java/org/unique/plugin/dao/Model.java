@@ -8,6 +8,8 @@ import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
+import org.unique.plugin.db.exception.QueryException;
+import org.unique.plugin.db.exception.UpdateException;
 import org.unique.web.core.Const;
 import org.unique.web.util.BaseKit;
 
@@ -29,35 +31,41 @@ public class Model<M extends Model<?>> implements Serializable {
     
     private Object[] NULL_PARA_ARRAY = {};
     
-    public M find(String sql, Object... params) {
+    
+    /*----------------------------------无缓存直接查询数据库:S----------------------------------------*/
+    public M find(String sql, Object... params) throws QueryException {
         return (M) DB.find(this.getClass(), sql, params);
     }
 
-    public List<M> findList(String sql, Object... params) {
+    public List<M> findList(String sql, Object... params) throws QueryException {
         return (List<M>) DB.findList(this.getClass(), sql, params);
     }
     
-    public Page<M> findListPage(int page, int pageSize, String sql, Object... params) {
+    public Page<M> findListPage(int page, int pageSize, String sql, Object... params) throws QueryException {
         return (Page<M>) DB.findListPage(this.getClass(), page, pageSize, sql, params);
     }
 
-    public List<Map<String, Object>> findMapList(String sql, Object... params) {
+    public List<Map<String, Object>> findMapList(String sql, Object... params) throws QueryException {
         return DB.findMapList(sql, params);
     }
     
-    public List<Map<String, Object>> findMapListPage(String sql, int page, int pageSize, Object... params) {
+    public List<Map<String, Object>> findMapListPage(String sql, int page, int pageSize, Object... params) throws QueryException {
         return DB.findPage(sql, page, pageSize, params);
     }
     
-    public int delete(String sql, Object... params) {
+    public int delete(String sql, Object... params) throws UpdateException{
         return DB.update(sql, params);
     }
 
-    public int update(String sql, Object... params) {
+    public int update(String sql, Object... params) throws UpdateException {
         int count = DB.update(sql, params);
         return count;
     }
-
+    /*----------------------------------无缓存直接查询数据库:E----------------------------------------*/
+    
+    
+    
+    /*----------------------------------缓存查询:S----------------------------------------*/
     /**
      * 通知清除缓存
      */
@@ -74,8 +82,14 @@ public class Model<M extends Model<?>> implements Serializable {
         redis.delLike(this.getClass().getSimpleName() + "_");
     }
 
-    /*---------------------------------cache---------------------------------*/
-
+    /**
+     * sql转key
+     * @param pageNumber
+     * @param pageSize
+     * @param sql
+     * @param paras
+     * @return
+     */
     private String sql2key(Integer pageNumber, Integer pageSize, String sql, Object... paras) {
         StringBuilder key = new StringBuilder(sql);
         if (null != pageNumber) {
@@ -163,5 +177,6 @@ public class Model<M extends Model<?>> implements Serializable {
     public List<M> findListByCache(String key, int timeout, String sql) {
         return findListByCache(key, timeout, sql, NULL_PARA_ARRAY);
     }
+    /*----------------------------------缓存查询:E---------------------------------------*/
 
 }

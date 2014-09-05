@@ -343,7 +343,7 @@ public class DB {
      * @return
      */
     public static int update(String sql, Object... params) {
-        int result;
+        int result = 0;
         try {
             result = getQueryRunner().update(sql, params);
         } catch (SQLException e) {
@@ -362,7 +362,7 @@ public class DB {
      * @return
      */
     public static int[] updateBatch(String sql, List<Object[]> list) {
-        int[] result;
+        int[] result = {};
         try {
             Object[] param = list.toArray();
             Object[][] params = new Object[param.length][];
