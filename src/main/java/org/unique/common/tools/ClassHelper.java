@@ -82,7 +82,6 @@ public class ClassHelper {
                     classes.add(Class.forName(packageName + '.' + className));
                 } catch (ClassNotFoundException e) {
                     logger.error("add user custom view class error, can't find such .class file !");
-                    e.printStackTrace();
                 }
             }
         }

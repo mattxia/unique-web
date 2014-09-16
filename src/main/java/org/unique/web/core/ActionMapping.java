@@ -47,7 +47,7 @@ public class ActionMapping {
 
         private static final ActionMapping single = new ActionMapping();
     }
-
+    
     /**
      * the custom method
      * @return
@@ -64,7 +64,7 @@ public class ActionMapping {
     /**
      * build routing mapping
      */
-    public void buildActionMapping() {
+    public Map<RouteMatcher, Route> buildActionMapping() {
         urlMapping.clear();
 
         // to filter method
@@ -145,6 +145,7 @@ public class ActionMapping {
                 }
             }
         }
+        return urlMapping;
     }
 
     private static final void warnning(String actionKey, Class<? extends Controller> controllerClass, Method method) {

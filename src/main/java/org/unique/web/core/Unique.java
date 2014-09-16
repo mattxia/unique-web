@@ -13,6 +13,8 @@ import org.unique.plugin.cache.JedisCache;
 import org.unique.web.annotation.Path;
 import org.unique.web.handler.Handler;
 import org.unique.web.handler.impl.DefalutHandlerImpl;
+import org.unique.web.route.Route;
+import org.unique.web.route.RouteMatcher;
 
 /**
  * unique
@@ -60,7 +62,7 @@ public class Unique {
 
         // init actionMapping
         initActionMapping();
-
+        
         // init handler
         initHandler();
     }
@@ -76,7 +78,8 @@ public class Unique {
     }
 
     private void initActionMapping() {
-        actionMapping.buildActionMapping();
+    	Map<RouteMatcher, Route> mapping = actionMapping.buildActionMapping();
+        logger.info("action mapping ：" + mapping);
     }
 
     public Handler getHandler() {
