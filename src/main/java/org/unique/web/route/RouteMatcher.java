@@ -26,6 +26,9 @@ public final class RouteMatcher {
         int count = 0;
         Pattern p = Pattern.compile("/\\{[a-zA-Z0-9]+\\}");
         Matcher m = p.matcher(url);
+        if(url.endsWith("/")){
+    		url = url.substring(0, url.length() - 1);
+    	}
         while (m.find()) {
             url = url.replaceAll("/\\{[a-zA-Z0-9]+\\}", "/([^/]*)");
             count++;
@@ -35,8 +38,15 @@ public final class RouteMatcher {
         sb.append('$');
         this.pattern = Pattern.compile(sb.toString());
     }
+    
+    public Pattern getPattern(){
+    	return this.pattern;
+    }
 
     public String[] getUrlParameters(String url) {
+    	if(url.endsWith("/")){
+        	url = url.substring(0, url.length() - 1);
+        }
         Matcher m = pattern.matcher(url);
         if (!m.matches()) {
             return null;

@@ -2,6 +2,7 @@ package org.unique.web.core;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.unique.common.tools.ClassHelper;
@@ -58,8 +59,6 @@ public class Unique {
         // init container
         initIOC();
 
-        logger.info("beans : " + container.getBeanMap());
-
         // init actionMapping
         initActionMapping();
         
@@ -71,6 +70,7 @@ public class Unique {
         container = DefaultContainerImpl.single();
         BeanFactory.init(container);
         loadClasses();
+        logger.info("beans : " + container.getBeanMap());
     }
 
     private void initHandler() {
@@ -79,7 +79,11 @@ public class Unique {
 
     private void initActionMapping() {
     	Map<RouteMatcher, Route> mapping = actionMapping.buildActionMapping();
-        logger.info("action mapping ：" + mapping);
+    	Set<RouteMatcher> matcherSet = mapping.keySet();
+    	for(RouteMatcher r : matcherSet){
+    		Pattern p = r.getPattern();
+    		logger.info("action ：" + p.toString());
+    	}
     }
 
     public Handler getHandler() {
@@ -109,15 +113,15 @@ public class Unique {
         Set<Class<?>> classes = ClassHelper.scanPackage(pack);
         for (Class<?> clazz : classes) {
             // determine whether the controller
-            if (null != clazz.getSuperclass() && clazz.getSuperclass().equals(Controller.class)) {
-                Path path = clazz.getAnnotation(Path.class);
+        	
+        	if(Controller.class.isAssignableFrom(clazz)){
+        		Path path = clazz.getAnnotation(Path.class);
                 if (null == path) {
                     controllerMap.put("/", (Class<? extends Controller>) clazz);
                 } else {
                     controllerMap.put(path.value(), (Class<? extends Controller>) clazz);
                 }
-            }
-
+        	}
             if (container.isRegister(clazz.getAnnotations())) {
                 // scan the class to container
                 container.registBean(clazz);
