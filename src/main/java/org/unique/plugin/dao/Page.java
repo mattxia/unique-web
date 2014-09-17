@@ -8,8 +8,7 @@ import java.util.List;
  * @date:2014年8月21日
  * @version:1.0
  */
-@SuppressWarnings("hiding")
-public class Page<Model> {
+public class Page<T> {
 
 	/*
 	 * 当前页
@@ -54,8 +53,8 @@ public class Page<Model> {
 	/*
 	 * 数据集
 	 */
-	private List<Model> results;
-
+	private List<T> results;
+	
 	/**
 	 * @param totleCount 	总记录数
 	 * @param page			当前第几页
@@ -162,11 +161,11 @@ public class Page<Model> {
 		this.last_page = last_page;
 	}
 
-	public List<Model> getResults() {
+	public List<T> getResults() {
 		return results;
 	}
 
-	public void setResults(List<Model> results) {
+	public void setResults(List<T> results) {
 		this.results = results;
 	}
 

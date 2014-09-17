@@ -3,6 +3,8 @@ package com.demo.controller.front.index;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.ws.Action;
+
 import org.unique.common.tools.JSONUtil;
 import org.unique.ioc.annotation.Autowired;
 import org.unique.plugin.cache.Cache;
@@ -62,8 +64,9 @@ public class IndexController extends Controller {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@org.unique.web.annotation.Action("ff/show/{mid}")
 	public void show() {
-		
+		System.out.println("show");
 	}
 }
