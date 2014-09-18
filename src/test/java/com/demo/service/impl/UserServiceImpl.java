@@ -1,8 +1,7 @@
 package com.demo.service.impl;
 
-import java.util.List;
-
 import org.unique.ioc.annotation.Service;
+import org.unique.plugin.dao.Page;
 
 import com.demo.model.User;
 import com.demo.service.UserService;
@@ -11,8 +10,9 @@ import com.demo.service.UserService;
 public class UserServiceImpl implements UserService {
     
     @Override
-    public List<User> getUserList() {
-        return User.db.findList("select * from user");
+    public Page<User> getUserList() {
+    	
+        return User.db.findListPage(1, 10, "select * from t_user");
     }
 
     @Override

@@ -1,13 +1,13 @@
 package com.demo.service;
 
-import java.util.List;
+import org.unique.plugin.dao.Page;
 
 import com.demo.model.User;
 
 
 public interface UserService {
 
-    List<User> getUserList();
+	Page<User> getUserList();
     
     boolean deleteUser(int uid);
     

@@ -29,7 +29,7 @@ public class BeetlRender implements Render {
 		if(view.endsWith("/" + Const.VIEW_EXT) ){
 			return;
 		}
-		String path = view.startsWith("/") ? viewPath + this.view : viewPath + "/" + this.view;
+		String path = view.startsWith("/") ? this.view : viewPath + "/" + this.view;
 		path = path.replaceAll("//", "/");
 		response.setContentType(contentType);
 		response.setCharacterEncoding(Const.ENCODING);

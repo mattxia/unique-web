@@ -116,11 +116,14 @@ public class Unique {
         	
         	if(Controller.class.isAssignableFrom(clazz)){
         		Path path = clazz.getAnnotation(Path.class);
-                if (null == path) {
-                    controllerMap.put("/", (Class<? extends Controller>) clazz);
-                } else {
-                    controllerMap.put(path.value(), (Class<? extends Controller>) clazz);
-                }
+//                if (null == path) {
+//                    controllerMap.put("/", (Class<? extends Controller>) clazz);
+//                } else {
+//                    controllerMap.put(path.value(), (Class<? extends Controller>) clazz);
+//                }
+        		if(null != path){
+        			controllerMap.put(path.value(), (Class<? extends Controller>) clazz);
+        		}
         	}
             if (container.isRegister(clazz.getAnnotations())) {
                 // scan the class to container

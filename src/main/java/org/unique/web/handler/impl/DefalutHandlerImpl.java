@@ -63,7 +63,7 @@ public class DefalutHandlerImpl implements Handler {
             logger.debug("reuqestURL：[" + target + "]");
 
             new ActionInvocation(route, controller).invoke();
-
+            
             Render render = controller.getRender();
             if (render != null) {
                 render.render(request, response, route.getViewPath());

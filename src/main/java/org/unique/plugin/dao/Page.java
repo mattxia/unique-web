@@ -54,43 +54,43 @@ public class Page<T> {
 	 * 数据集
 	 */
 	private List<T> results;
-	
+
 	/**
 	 * @param totleCount 	总记录数
 	 * @param page			当前第几页
 	 * @param pageSize	 	每页显示条数
 	 */
 	public Page(Long totleCount, Integer page, Integer pageSize) {
-		
+
 		this.page = page;
-		
+
 		this.pageSize = pageSize;
-		
+
 		//总条数
-		this.totalCount = totleCount;
-		
+		this.setTotalCount(totleCount);
+
 		//总页数
-		this.totalPage = (int) (totleCount / pageSize);
+		this.setTotalPage((int) (totleCount / pageSize));
 
 		//起始位置
-		this.startIndex = Math.max(0, (this.page - 1) * pageSize);
-		
+		this.setStartIndex(Math.max(0, (this.page - 1) * pageSize));
+
 		//首页
-		this.home_page = 1;
-		
+		this.setHome_page(1);
+
 		//尾页
-		this.last_page = this.totalPage;
-		
+		this.setLast_page(this.totalPage);
+
 		//上一页
-		this.prev_page = Math.max(this.page - 1, home_page);
+		this.setPrev_page(Math.max(this.page - 1, home_page));
 
 		//下一页
-		this.next_page = Math.min(this.page + 1, last_page);
+		this.setNext_page(Math.min(this.page + 1, last_page));
 
 	}
 
 	public Integer getPage() {
-		return page;
+		return this.page;
 	}
 
 	public void setPage(Integer page) {
@@ -98,7 +98,7 @@ public class Page<T> {
 	}
 
 	public Integer getPageSize() {
-		return pageSize;
+		return this.pageSize;
 	}
 
 	public void setPageSize(Integer pageSize) {
@@ -106,7 +106,7 @@ public class Page<T> {
 	}
 
 	public Integer getStartIndex() {
-		return startIndex;
+		return this.startIndex;
 	}
 
 	public void setStartIndex(Integer startIndex) {
@@ -114,7 +114,7 @@ public class Page<T> {
 	}
 
 	public Integer getTotalPage() {
-		return totalPage;
+		return this.totalPage;
 	}
 
 	public void setTotalPage(Integer totalPage) {
@@ -130,7 +130,7 @@ public class Page<T> {
 	}
 
 	public Integer getPrev_page() {
-		return prev_page;
+		return this.prev_page;
 	}
 
 	public void setPrev_page(Integer prev_page) {
@@ -138,7 +138,7 @@ public class Page<T> {
 	}
 
 	public Integer getNext_page() {
-		return next_page;
+		return this.next_page;
 	}
 
 	public void setNext_page(Integer next_page) {
@@ -146,7 +146,7 @@ public class Page<T> {
 	}
 
 	public Integer getHome_page() {
-		return home_page;
+		return this.home_page;
 	}
 
 	public void setHome_page(Integer home_page) {
@@ -154,7 +154,7 @@ public class Page<T> {
 	}
 
 	public Integer getLast_page() {
-		return last_page;
+		return this.last_page;
 	}
 
 	public void setLast_page(Integer last_page) {
@@ -162,7 +162,7 @@ public class Page<T> {
 	}
 
 	public List<T> getResults() {
-		return results;
+		return this.results;
 	}
 
 	public void setResults(List<T> results) {
@@ -170,7 +170,7 @@ public class Page<T> {
 	}
 
 	public Integer getNavNum() {
-		return navNum;
+		return this.navNum;
 	}
 
 	public void setNavNum(Integer navNum) {

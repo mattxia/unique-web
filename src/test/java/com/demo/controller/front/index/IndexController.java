@@ -1,14 +1,12 @@
 package com.demo.controller.front.index;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.xml.ws.Action;
 
 import org.unique.common.tools.JSONUtil;
 import org.unique.ioc.annotation.Autowired;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
+import org.unique.plugin.dao.Page;
 import org.unique.plugin.patchca.PatchcaPlugin;
 import org.unique.web.annotation.Path;
 import org.unique.web.core.Controller;
@@ -28,7 +26,7 @@ public class IndexController extends Controller {
 
 	public void index() {
 		System.out.println("before");
-		List<User> userList = userService.getUserList();
+		Page<User> userList = userService.getUserList();
 		System.out.println("aaa:" + JSONUtil.toJSON(userList));
 		System.out.println("after");
 		this.renderJson(JSONUtil.toJSON(userList));
