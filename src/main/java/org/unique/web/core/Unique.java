@@ -84,6 +84,7 @@ public class Unique {
     		Pattern p = r.getPattern();
     		logger.info("action ：" + p.toString());
     	}
+    	logger.info("action size ：" + matcherSet.size());
     }
 
     public Handler getHandler() {
@@ -116,11 +117,6 @@ public class Unique {
         	
         	if(Controller.class.isAssignableFrom(clazz)){
         		Path path = clazz.getAnnotation(Path.class);
-//                if (null == path) {
-//                    controllerMap.put("/", (Class<? extends Controller>) clazz);
-//                } else {
-//                    controllerMap.put(path.value(), (Class<? extends Controller>) clazz);
-//                }
         		if(null != path){
         			controllerMap.put(path.value(), (Class<? extends Controller>) clazz);
         		}
