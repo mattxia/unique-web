@@ -28,7 +28,7 @@ public final class RouteMatcher {
 		Matcher m = p.matcher(url);
 		while (m.find()) {
 			//url = url.replaceAll("/\\{[a-zA-Z0-9]+\\}", "(/?[^/]*)");
-			url = url.replaceAll("/\\{[a-zA-Z0-9]+\\}", "(/?[\\d]*)");
+			url = url.replaceAll("/\\{[a-zA-Z0-9]+\\}", "(/?[0-9]*)");
 			count++;
 		}
 		this.orders = new int[count];
