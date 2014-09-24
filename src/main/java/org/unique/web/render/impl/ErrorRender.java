@@ -33,7 +33,7 @@ public class ErrorRender implements Render {
 	}
 	
 	public void render(HttpServletRequest request, HttpServletResponse response, String viewPath) {
-		response.setStatus(getErrorCode());	// HttpServletResponse.SC_XXX_XXX
+		response.setStatus(getErrorCode());
 		
 		// render with view
 		if (view != null) {

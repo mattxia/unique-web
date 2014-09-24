@@ -94,16 +94,18 @@ public abstract class Const {
                 if (StringUtils.isNotBlank(m.get("unique.db.pool"))) {
                     Const.POOL_TYPE = m.get("unique.db.pool").trim();
                 }
+                if(StringUtils.isNotBlank(m.get("unique.errorpage.404"))){
+                	ERRPR_VIEWMAPPING.put(404, m.get("unique.errorpage.404"));
+                }
+                if(StringUtils.isNotBlank(m.get("unique.errorpage.500"))){
+                	ERRPR_VIEWMAPPING.put(500, m.get("unique.errorpage.500"));
+                }
             }
         }
     }
 
     public boolean getDevMode() {
         return false;
-    }
-
-    public void setErrorView(int errorCode, String errorView) {
-        ERRPR_VIEWMAPPING.put(errorCode, errorView);
     }
 
     public static String getErrorView(int errorCode) {
