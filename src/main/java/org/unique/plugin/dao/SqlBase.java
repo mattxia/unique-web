@@ -288,5 +288,21 @@ public class SqlBase {
 		}
 		return this;
 	}
+
+	public Map<String, Object> getWhereMap() {
+		return whereMap;
+	}
+
+	public void setWhereMap(Map<String, Object> whereMap) {
+		this.whereMap = whereMap;
+	}
+
+	public Map<String, Object> getSetMap() {
+		return setMap;
+	}
+
+	public void setSetMap(Map<String, Object> setMap) {
+		this.setMap = setMap;
+	}
 	
 }

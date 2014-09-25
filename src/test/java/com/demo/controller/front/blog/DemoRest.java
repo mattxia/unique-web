@@ -7,10 +7,8 @@ import org.unique.web.annotation.Intercept;
 import org.unique.web.annotation.Path;
 import org.unique.web.core.Controller;
 
-import com.demo.inteceptor.BBBBB;
 
 @Path("/demo")
-@Intercept(BBBBB.class)
 public class DemoRest extends Controller{
 	
     private Logger logger = Logger.getLogger(DemoRest.class);
@@ -20,6 +18,7 @@ public class DemoRest extends Controller{
     
 	public void index(){
 	    logger.info("index");
+	    System.out.println("index......................");
 	    this.render("index");
 	}
 	

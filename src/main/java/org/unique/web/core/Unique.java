@@ -14,6 +14,7 @@ import org.unique.plugin.cache.JedisCache;
 import org.unique.web.annotation.Path;
 import org.unique.web.handler.Handler;
 import org.unique.web.handler.impl.DefalutHandlerImpl;
+import org.unique.web.interceptor.InterceptorFactory;
 import org.unique.web.route.Route;
 import org.unique.web.route.RouteMatcher;
 
@@ -51,7 +52,7 @@ public class Unique {
         private static final Unique single = new Unique();
     }
 
-    void init() {
+    boolean init() {
 
         // init const config
         Const.init();
@@ -62,11 +63,29 @@ public class Unique {
         // init actionMapping
         initActionMapping();
         
+        // init global interceptor
+        initInterceptor();
+        
         // init handler
         initHandler();
+        
+        return true;
     }
 
-    private void initIOC() {
+    /**
+     * 初始化全局拦截器
+     */
+    private void initInterceptor() {
+    	try {
+			InterceptorFactory.buildInterceptor();
+		} catch (InstantiationException e) {
+			logger.error("init interceptor error : " + e.getMessage());
+		} catch (IllegalAccessException e) {
+			logger.error("init interceptor error : " + e.getMessage());
+		}
+	}
+
+	private void initIOC() {
         container = DefaultContainerImpl.single();
         BeanFactory.init(container);
         loadClasses();

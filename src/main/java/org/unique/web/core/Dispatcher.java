@@ -28,8 +28,10 @@ public class Dispatcher implements Filter {
     private Logger logger = Logger.getLogger(Dispatcher.class);
     
     private static Unique unique = Unique.single();
+    
+    private static boolean isInit = false;
 
-    private Handler handler;
+    private static Handler handler;
 
     private int contextPathLength;
 
@@ -37,20 +39,22 @@ public class Dispatcher implements Filter {
      * init
      */
     public void init(FilterConfig config) {
+    	
+    	if(!isInit){
+    		// config path
+            Const.CONFIG_PATH = config.getInitParameter("configPath");
+            ActionContext.single().setActionContext(config.getServletContext());
 
-        // config path
-        Const.CONFIG_PATH = config.getInitParameter("configPath");
-        ActionContext.single().setActionContext(config.getServletContext());
+            // init web
+            isInit = unique.init();
 
-        // init web
-        unique.init();
+            handler = unique.getHandler();
 
-        handler = unique.getHandler();
+            String contextPath = config.getServletContext().getContextPath();
+            contextPathLength = (contextPath == null || "/".equals(contextPath) ? 0 : contextPath.length());
 
-        String contextPath = config.getServletContext().getContextPath();
-        contextPathLength = (contextPath == null || "/".equals(contextPath) ? 0 : contextPath.length());
-
-        logger.debug("init finish!");
+            logger.info("unique web init finish!");
+    	}
     }
 
     /**

@@ -12,7 +12,6 @@ import org.unique.web.annotation.Intercept;
 import org.unique.web.annotation.Path;
 import org.unique.web.core.Controller;
 
-import com.demo.inteceptor.AAAA;
 import com.demo.service.A;
 
 /**
@@ -23,7 +22,6 @@ import com.demo.service.A;
  * @version：V1.0
  */
 @Path("/index")
-@Intercept(AAAA.class)
 public class IndexController extends Controller {
 
     private Logger logger = Logger.getLogger(IndexController.class);

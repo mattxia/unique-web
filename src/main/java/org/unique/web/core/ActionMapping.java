@@ -12,9 +12,6 @@ import org.unique.common.tools.CollectionUtil;
 import org.unique.web.annotation.Action;
 import org.unique.web.annotation.Action.HttpMethod;
 import org.unique.web.annotation.Path;
-import org.unique.web.interceptor.Interceptor;
-import org.unique.web.interceptor.InterceptorFactory;
-import org.unique.web.interceptor.impl.InterceptorFactoryBuilder;
 import org.unique.web.route.Route;
 import org.unique.web.route.RouteMatcher;
 
@@ -34,8 +31,6 @@ public class ActionMapping {
     // private static Logger log = Logger.getLogger(ActionMapping.class);
     private static final String SLASH = "/";
 
-    private Interceptor[] interceptors;
-    
     private ActionMapping() {
     }
 
@@ -72,16 +67,10 @@ public class ActionMapping {
         // all controller
         Set<Entry<String, Class<? extends Controller>>> entrySet = Unique.single().controllerMap.entrySet();
 
-        InterceptorFactory factory = InterceptorFactoryBuilder.buildInterceptorFactory();
-        this.interceptors = factory.getDefaultInterceptors();
-        factory.addToInterceptorsMap(interceptors);
-
         // for controller
         for (Entry<String, Class<? extends Controller>> entry : entrySet) {
             // controller
             Class<? extends Controller> controller = entry.getValue();
-
-            Interceptor[] controllerInters = factory.getControllerInterceptors(controller);
 
             Method[] methods = controller.getMethods();
             String path = "/";
@@ -99,9 +88,7 @@ public class ActionMapping {
                 String methodName = method.getName();
                 // filter the top controller method
                 if (!excludedMethodName.contains(methodName) && method.getParameterTypes().length == 0) {
-                    Interceptor[] methodInters = factory.getMethodInterceptors(method);
-                    Interceptor[] actionInters = factory.getActionInterceptors(interceptors, controllerInters, controller, methodInters, method);
-                    
+                	
                     // get action
                     Action ak = method.getAnnotation(Action.class);
                     RouteMatcher mac = null;
@@ -120,13 +107,13 @@ public class ActionMapping {
                         if (!action.startsWith("/")) {
                             action = path.equals("/") ? path + action : path + "/" + action;
                         }
-                        Route route = new Route(actionInters, controller, path, action, method, methodType, path);
+                        Route route = new Route(controller, path, action, method, methodType, path);
 
                         mac = new RouteMatcher(action);
                         urlMapping.put(mac, route);
                     } else if (methodName.equals("index")) {
                         String action = path.equals(SLASH) ? SLASH + methodName : path + SLASH + methodName;
-                        Route route = new Route(actionInters, controller, path, action, method, HttpMethod.ALL, path);
+                        Route route = new Route(controller, path, action, method, HttpMethod.ALL, path);
                         mac = new RouteMatcher(action);
                         route = urlMapping.put(mac, route);
                         if (null != route) {
@@ -138,7 +125,7 @@ public class ActionMapping {
                             warnning(action, controller, method);
                             continue;
                         }
-                        Route route = new Route(actionInters, controller, path, action, method, HttpMethod.ALL, path);
+                        Route route = new Route(controller, path, action, method, HttpMethod.ALL, path);
                         mac = new RouteMatcher(action);
                         urlMapping.put(mac, route);
                     }

@@ -10,10 +10,9 @@ import org.unique.web.core.ActionInvocation;
  */
 public interface Interceptor {
 
-	void intercept(ActionInvocation ai);
-	
+	void intercept(ActionInvocation ai) throws Exception;
+
 	enum CLEAR {
-		UPPER,
-		ALL
+		UPPER, ALL
 	}
 }

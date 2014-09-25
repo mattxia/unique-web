@@ -28,7 +28,7 @@ public final class RouteMatcher {
 		Matcher m = p.matcher(url);
 		while (m.find()) {
 			//url = url.replaceAll("/\\{[a-zA-Z0-9]+\\}", "(/?[^/]*)");
-			url = url.replaceAll("/\\{[a-zA-Z0-9]+\\}", "(/?[0-9]*)");
+			url = url.replaceAll("/\\{[a-zA-Z0-9]+\\}", "(/[0-9]+)");
 			count++;
 		}
 		this.orders = new int[count];
@@ -80,6 +80,12 @@ public final class RouteMatcher {
 	private boolean isNumeric(String str) {
 		Pattern pattern = Pattern.compile("^-?[0-9]*$");
 		return pattern.matcher(str).matches();
+	}
+	
+	public static void main(String[] args) {
+		String url = "/admin/music";
+		Pattern p = Pattern.compile("/admin/music(/[0-9]+)");
+		System.out.println(p.matcher(url).find());
 	}
 
 }
