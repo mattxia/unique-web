@@ -21,16 +21,5 @@
 		<filter-name>dispatcher</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	<servlet>
-		<description>
-		</description>
-		<display-name>AAAA</display-name>
-		<servlet-name>AAAA</servlet-name>
-		<servlet-class>org.unique.maintest.AAAA</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AAAA</servlet-name>
-		<url-pattern>/AAAA</url-pattern>
-	</servlet-mapping>
 	
 </web-app>

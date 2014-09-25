@@ -135,9 +135,12 @@ public class DB {
         Page<T> pageModel = new Page<T>(totleCount, page, pageSize);
         try {
             sql = sql + " LIMIT ?,?";
-            List<Object> list = Arrays.asList(params);
-            if (null == params || params.length < 1) {
-                list = CollectionUtil.newArrayList();
+            List<Object> list = null;
+            if (!CollectionUtil.isEmpty(params)) {
+            	list = CollectionUtil.newArrayList(params.length + 2);
+            	list.addAll(Arrays.asList(params));
+            } else{
+            	list = CollectionUtil.newArrayList(2);
             }
             list.add(pageModel.getStartIndex());
             list.add(pageModel.getPageSize());
@@ -261,9 +264,12 @@ public class DB {
         List<Map<String, Object>> fieldMapList;
         try {
             sql = sql + " LIMIT ?,?";
-            List<Object> list = Arrays.asList(params);
-            if (null == params || params.length < 1) {
-                list = CollectionUtil.newArrayList();
+            List<Object> list = null;
+            if (!CollectionUtil.isEmpty(params)) {
+            	list = CollectionUtil.newArrayList(params.length + 2);
+            	list.addAll(Arrays.asList(params));
+            } else{
+            	list = CollectionUtil.newArrayList(2);
             }
             list.add(page);
             list.add(pageSize);

@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.unique.web.interceptor.AbstractInterceptor;
 import org.unique.web.interceptor.Interceptor;
 import org.unique.web.interceptor.InterceptorFactory;
@@ -18,8 +17,6 @@ import org.unique.web.route.Route;
  */
 public class ActionInvocation {
 
-	private Logger logger = Logger.getLogger(ActionInvocation.class);
-	
     private Controller controller;
 
     private Route action;
@@ -39,7 +36,7 @@ public class ActionInvocation {
         this.interceptorList = InterceptorFactory.getInterceptors();
     }
 
-    public void invoke() throws Exception {
+    public void invoke() {
     	try {
     		if(interceptorList.size() == 0 || interceptorList.size() == pos){
     			action.getMethod().invoke(controller, NULL_ARGS);
@@ -55,12 +52,15 @@ public class ActionInvocation {
     				inter.intercept(this);
     			}
     		}
-		} catch (IllegalAccessException e) {
-			logger.error("IllegalAccessException - action invocation execute error :" + e.getMessage());
-		} catch (IllegalArgumentException e) {
-			logger.error("IllegalArgumentException - action invocation execute error :" + e.getMessage());
 		} catch (InvocationTargetException e) {
-			logger.error("InvocationTargetException - action invocation execute error :" + e.getMessage());
+			Throwable cause = e.getTargetException();
+			if (cause instanceof RuntimeException)
+				throw (RuntimeException)cause;
+			throw new RuntimeException(e);
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
     }
 

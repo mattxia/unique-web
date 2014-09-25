@@ -40,7 +40,7 @@ public class DefalutHandlerImpl implements Handler {
             return false;
         }
 
-        logger.debug("target:" + target);
+        logger.debug("target：[" + target + "]");
 
         // 获取路由
         Route route = actionMapping.getRoute(target);
@@ -60,7 +60,6 @@ public class DefalutHandlerImpl implements Handler {
             }
             Controller controller = (Controller) BeanFactory.getBean(route.getControllerClass().getName(), BeanType.SINGLE);
             controller.init(request, response, route.getParams());
-            logger.debug("reuqestURL：[" + target + "]");
 
             new ActionInvocation(route, controller).invoke();
             

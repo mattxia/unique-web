@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,8 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CollectionUtil {
 
     /**
-     * 创建hashmap
-     * 
+     * new HashMap
      * @return
      */
     public static <K, V> HashMap<K, V> newHashMap() {
@@ -30,26 +30,52 @@ public class CollectionUtil {
     }
 
     /**
-     * 创建concurrentHashMap
+     * new HashMap and initialCapacity
+     * @param size
+     * @return
+     */
+    public static <K, V> HashMap<K, V> newHashMap(int size) {
+        return new HashMap<K, V>();
+    }
+    
+    /**
+     * new concurrentHashMap
      * 
      * @return
      */
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
         return new ConcurrentHashMap<K, V>();
     }
+    
+    /**
+     * new concurrentHashMap and initialCapacity
+     * @param size
+     * @return
+     */
+    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(int size) {
+        return new ConcurrentHashMap<K, V>(size);
+    }
 
     /**
-     * 创建arraylist
+     * new ArrayList
      * 
      * @return
      */
     public static <T> ArrayList<T> newArrayList() {
         return new ArrayList<T>();
     }
+    
+    /**
+     * new ArrayList and initialCapacity
+     * @param size
+     * @return
+     */
+    public static <T> ArrayList<T> newArrayList(int size) {
+        return new ArrayList<T>(size);
+    }
 
     /**
-     * 创建hashSet
-     * 
+     * new HashSet
      * @return
      */
     public static <T> HashSet<T> newHashSet() {
@@ -57,8 +83,24 @@ public class CollectionUtil {
     }
 
     /**
-     * 对map排序
-     * 
+     * new HashSet and initialCapacity
+     * @param size
+     * @return
+     */
+    public static <T> HashSet<T> newHashSet(int size) {
+        return new HashSet<T>(size);
+    }
+    
+    /**
+     * new TreeSet
+     * @return
+     */
+    public static <T> TreeSet<T> newTreeSet() {
+        return new TreeSet<T>();
+    }
+    
+    /**
+     * map sort
      * @param map
      * @param compator
      * @return
@@ -74,7 +116,7 @@ public class CollectionUtil {
     }
     
     /**
-     * 返回集合是否为空
+     * return collection is empty
      * @param c
      * @return
      */
@@ -83,11 +125,20 @@ public class CollectionUtil {
     }
     
     /**
-     * 返回map是否为空
+     * return map is empty
      * @param map
      * @return
      */
     public static <K,V> boolean isEmpty(Map<K, V> map){
         return (null == map || map.isEmpty());
+    }
+    
+    /**
+     * return array is empty
+     * @param arr
+     * @return
+     */
+    public static <T> boolean isEmpty(T[] arr){
+    	return null == arr || arr.length == 0;
     }
 }
