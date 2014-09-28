@@ -39,19 +39,18 @@ public class SendMail {
 	private static final String FROM = Const.CONST_MAP.get("mail.stmp.username"); // 我的企业邮箱地址
 	private static final int PORT = BaseKit.getInt(Const.CONST_MAP.get("mail.smtp.port"), 25); // 邮件端口
 	private static final int TIMEOUT = BaseKit.getInt(Const.CONST_MAP.get("mail.smtp.timeout"), 2000); // 邮件超时
-	private static final String MAIL_NAME = Const.CONST_MAP.get("mail.stmp.title"); // 邮件title
-	private static final String USERNAME = Const.CONST_MAP.get("mail.stmp.username"); // 用户名
+	private static final String MAIL_NAME = Const.CONST_MAP.get("mail.stmp.title"); // 邮件发送者
 	private static final String PASSWORD = Const.CONST_MAP.get("mail.stmp.pwd"); // 密码
-	private static final boolean AUTH = BaseKit.getBoolean(Const.CONST_MAP.get("mail.smtp.auth"), true); // 时候校验
+	private static final boolean AUTH = BaseKit.getBoolean(Const.CONST_MAP.get("mail.smtp.auth"), true); // 是否校验
 	private static final boolean DEBUG = BaseKit.getBoolean(Const.CONST_MAP.get("mail.smtp.debug"), false);// 是否debug
 
 	private static final int FAILED_RESEND_TIMES = 3; // 重试次数
 
 	private static final int THREAD_SLEEP = 3000; // 休眠时间 threadsleep
-
+	
 	/* 函数共用字段 */
 	private static Message message = initMessage();
-
+	
 	private static final Message initMessage() {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", HOST);
@@ -61,7 +60,7 @@ public class SendMail {
 		Session session = Session.getInstance(props, new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(USERNAME, PASSWORD);
+				return new PasswordAuthentication(FROM, PASSWORD);
 			}
 		});
 		session.setDebug(DEBUG);
