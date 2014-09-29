@@ -88,8 +88,8 @@ public abstract class Const {
                 if (StringUtils.isNotBlank(m.get("unique.beanspackage"))) {
                     Const.BASE_PACKAGE = m.get("unique.beanspackage").trim();
                 }
-                if (StringUtils.isNotBlank(m.get("redis.isopen"))) {
-                    Const.REDIS_IS_OPEN = Boolean.valueOf(m.get("redis.isopen").trim());
+                if (StringUtils.isNotBlank(m.get("unique.redis.isopen"))) {
+                    Const.REDIS_IS_OPEN = Boolean.valueOf(m.get("unique.redis.isopen").trim());
                 }
                 if (StringUtils.isNotBlank(m.get("unique.db.pool"))) {
                     Const.POOL_TYPE = m.get("unique.db.pool").trim();

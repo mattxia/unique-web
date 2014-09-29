@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.unique.ioc.impl.DefaultContainerImpl;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
 import org.unique.plugin.db.exception.QueryException;
@@ -25,7 +26,8 @@ public class Model<M extends Model<?>> implements Serializable {
 
     static{
         if(Const.REDIS_IS_OPEN){
-            redis = new JedisCache();
+        	DefaultContainerImpl.single().registBean(JedisCache.class);
+            redis = (Cache) DefaultContainerImpl.single().getBean(JedisCache.class);
         }
     }
     
@@ -91,7 +93,7 @@ public class Model<M extends Model<?>> implements Serializable {
      * @return
      */
     private String sql2key(Integer pageNumber, Integer pageSize, String sql, Object... paras) {
-        StringBuilder key = new StringBuilder(sql);
+        StringBuilder key = new StringBuilder(sql.replaceAll("\\?", "").replaceAll("\\s", ""));
         if (null != pageNumber) {
             key.append(pageNumber);
         }
@@ -101,7 +103,7 @@ public class Model<M extends Model<?>> implements Serializable {
         if (null != paras && paras.length > 0) {
             for (Object object : paras) {
                 if (null != object) {
-                    key.append(BaseKit.getObject(object));
+                    key.append(BaseKit.getObject(object).toString());
                 }
             }
         }
@@ -109,7 +111,7 @@ public class Model<M extends Model<?>> implements Serializable {
     }
 
     public M findByCache(String sql, Object... paras) {
-        String key = sql2key(null, null, sql, null, paras);
+        String key = sql2key(null, null, sql, paras);
         return findByCache(key, sql, paras);
     }
 
@@ -135,7 +137,7 @@ public class Model<M extends Model<?>> implements Serializable {
     }
 
     public List<M> findListByCache(String sql, Object... paras) {
-        String key = sql2key(null, null, sql, null, paras);
+        String key = sql2key(null, null, sql, paras);
         return findListByCache(key, sql, paras);
     }
 
@@ -151,7 +153,7 @@ public class Model<M extends Model<?>> implements Serializable {
     }
 
     public List<M> findListByCache(int timeout, String sql, Object... paras) {
-        String key = sql2key(null, null, sql, null, paras);
+        String key = sql2key(null, null, sql, paras);
         return findListByCache(key, timeout, sql, paras);
     }
 

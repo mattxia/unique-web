@@ -20,4 +20,9 @@ public class UserServiceImpl implements UserService {
         return User.db.delete("update user t set t.status = 0 where t.uid = ?", uid) > 0;
     }
 
+	@Override
+	public User get(Integer uid) {
+		return User.db.findByCache("select * from t_user where uid = ?", uid);
+	}
+
 }

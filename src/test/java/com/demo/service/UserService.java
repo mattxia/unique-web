@@ -11,4 +11,5 @@ public interface UserService {
     
     boolean deleteUser(int uid);
     
+    User get(Integer uid);
 }

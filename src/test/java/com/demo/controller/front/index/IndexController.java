@@ -65,6 +65,8 @@ public class IndexController extends Controller {
 	
 	@org.unique.web.annotation.Action("ff/show/{mid}")
 	public void show() {
-		System.out.println("show");
+		Integer uid = this.getParaToInt();
+		User user = userService.get(uid);
+		System.out.println("show：" + user.getLogin_name());
 	}
 }
