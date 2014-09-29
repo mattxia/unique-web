@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.unique.common.tools.DateUtil;
+
 public class AAA {
 
 	public static void main(String[] args) {
@@ -13,5 +15,6 @@ public class AAA {
 		list.add(333);
 		list.add(334);
 		System.out.println(list);
+		System.out.println(DateUtil.getCurrentTime());
 	}
 }

@@ -189,4 +189,9 @@ public class JedisCache extends RedisUtil implements Cache {
         return super.listLen(key);
     }
 
+	@Override
+	public <T extends Serializable> T hgetModel(String key, String field) {
+		return super.hgetObj(key, field);
+	}
+
 }

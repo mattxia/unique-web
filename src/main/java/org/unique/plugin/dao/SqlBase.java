@@ -16,6 +16,8 @@ public class SqlBase {
 
 	private String baseSql;
 
+	private static Model<?> cmodel;
+
 	/**
 	 * where 条件
 	 */
@@ -35,7 +37,7 @@ public class SqlBase {
 	 * order by 常量 
 	 */
 	private String orderBy = null;
-	
+
 	private SqlBase() {
 	}
 
@@ -193,15 +195,15 @@ public class SqlBase {
 		StringBuffer sb = new StringBuffer(this.baseSql);
 		//查询语句生成
 		if (currentOpt == 1) {
-			
-			if(this.whereMap.size() > 0){
+
+			if (this.whereMap.size() > 0) {
 				sb.append(" where ");
 				for (String field : this.whereMap.keySet()) {
 					sb.append(field + " and ");
 				}
 			}
 			int pos = sb.lastIndexOf("and");
-			if(pos != -1){
+			if (pos != -1) {
 				sb = new StringBuffer(sb.substring(0, pos - 1));
 			}
 			if (StringUtils.isNotBlank(this.orderBy)) {
@@ -276,15 +278,66 @@ public class SqlBase {
 		return params.toArray();
 	}
 
-	/**
-	 * update set
-	 * @param field
-	 * @param value
-	 * @return
-	 */
 	public SqlBase set(String field, Object value) {
 		if (StringUtils.isNotBlank(field) && null != value) {
 			this.setMap.put(field + " = ?", value);
+		}
+		return this;
+	}
+
+	public SqlBase setIn(String field, Object... values) {
+		if (StringUtils.isNotBlank(field) && null != values) {
+			String params = "";
+			for (Object obj : values) {
+				params += obj + ",";
+			}
+			this.setMap.put(field + " in(?)", params);
+		}
+		return this;
+	}
+
+	public SqlBase setNotIn(String field, Object... values) {
+		if (StringUtils.isNotBlank(field) && null != values) {
+			String params = "";
+			for (Object obj : values) {
+				params += obj + ",";
+			}
+			this.setMap.put(field + " not in(?)", params);
+		}
+		return this;
+	}
+
+	public SqlBase setLike(String field, Object value) {
+		if (StringUtils.isNotBlank(field) && null != value) {
+			this.setMap.put(field + " like ?", "%" + value);
+		}
+		return this;
+	}
+
+	public SqlBase setGt(String field, Object value) {
+		if (null != field && null != value) {
+			this.setMap.put(field + " > ?", value);
+		}
+		return this;
+	}
+
+	public SqlBase setGte(String field, Object value) {
+		if (null != field && null != value) {
+			this.setMap.put(field + " >= ?", value);
+		}
+		return this;
+	}
+
+	public SqlBase setLt(String field, Object value) {
+		if (null != field && null != value) {
+			this.setMap.put(field + " < ?", value);
+		}
+		return this;
+	}
+
+	public SqlBase setLte(String field, Object value) {
+		if (null != field && null != value) {
+			this.setMap.put(field + " < ?", value);
 		}
 		return this;
 	}
@@ -304,5 +357,20 @@ public class SqlBase {
 	public void setSetMap(Map<String, Object> setMap) {
 		this.setMap = setMap;
 	}
-	
+
+	public static SqlBase update(Model<?> model) {
+		String tableName = model.getClass().getAnnotation(Table.class).name();
+		SqlBase base = new SqlBase();
+		cmodel = model;
+		base.baseSql = "update " + tableName + " ";
+		base.setMap = CollectionUtil.newHashMap();
+		base.whereMap = CollectionUtil.newHashMap();
+		base.currentOpt = 2;
+		return base;
+	}
+
+	public int execUpdate() {
+		return cmodel.update(this.getSQL(), this.getParams());
+	}
+
 }

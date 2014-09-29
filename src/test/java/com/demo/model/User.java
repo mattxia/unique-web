@@ -1,14 +1,14 @@
 package com.demo.model;
 
 import org.unique.plugin.dao.Model;
+import org.unique.plugin.dao.Table;
 
-
+@Table(name="t_user", PK="uid")
 public class User extends Model<User>{
 
     private static final long serialVersionUID = -1496693714751372133L;
     
     public static User db = new User();
-    
     private int uid;
     private String login_name;
     private String pass_word;

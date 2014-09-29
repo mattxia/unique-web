@@ -1388,4 +1388,25 @@ public class RedisUtil {
         }
     }
 
+	public <T extends Serializable> T hgetObj(final String key, final String field) {
+        return new Executor<T>(shardedJedisPool) {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            T execute() {
+                Object result = null;
+                
+                byte[] retVal = jedis.hget(SafeEncoder.encode(key), SafeEncoder.encode(field));
+                if (null != retVal) {
+                    try {
+                        result = SerializeUtil.unserialize(retVal);
+                    } catch (Exception e) {
+                        result = SafeEncoder.encode(retVal);
+                    }
+                }
+                return (T) result;
+            }
+        }.getResult();
+    }
+
 }

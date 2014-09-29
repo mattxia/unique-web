@@ -55,6 +55,8 @@ public interface Cache extends Serializable {
     String hset(String key, Map<String, String> map, int timeout);
 
     String hget(String key, String field);
+    
+    <T extends Serializable> T hgetModel(String key, String field);
 
     String hget(String key, String field, int timeout);
 

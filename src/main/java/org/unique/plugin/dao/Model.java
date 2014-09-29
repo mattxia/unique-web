@@ -1,184 +1,140 @@
 package org.unique.plugin.dao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import org.unique.common.tools.CollectionUtil;
 import org.unique.ioc.impl.DefaultContainerImpl;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
 import org.unique.plugin.db.exception.QueryException;
 import org.unique.plugin.db.exception.UpdateException;
 import org.unique.web.core.Const;
-import org.unique.web.util.BaseKit;
 
 /**
  * base model
  * 
  * @author rex
  */
-@SuppressWarnings({ "unchecked", "serial"})
+@SuppressWarnings({ "unchecked", "serial" })
 public class Model<M extends Model<?>> implements Serializable {
 
-    private static Cache redis;
+	private static Cache redis;
 
-    static{
-        if(Const.REDIS_IS_OPEN){
-        	DefaultContainerImpl.single().registBean(JedisCache.class);
-            redis = (Cache) DefaultContainerImpl.single().getBean(JedisCache.class);
-        }
-    }
-    
-    private Object[] NULL_PARA_ARRAY = {};
-    
-    
-    /*----------------------------------无缓存直接查询数据库:S----------------------------------------*/
-    public M find(String sql, Object... params) throws QueryException {
-        return (M) DB.find(this.getClass(), sql, params);
-    }
+	public static Model<?> db;
 
-    public List<M> findList(String sql, Object... params) throws QueryException {
-        return (List<M>) DB.findList(this.getClass(), sql, params);
-    }
-    
-    public Page<M> findListPage(int page, int pageSize, String sql, Object... params) throws QueryException {
-        return (Page<M>) DB.findListPage(this.getClass(), page, pageSize, sql, params);
-    }
+	static {
+		if (Const.REDIS_IS_OPEN) {
+			DefaultContainerImpl.single().registBean(JedisCache.class);
+			redis = (Cache) DefaultContainerImpl.single().getBean(JedisCache.class);
+		}
+	}
 
-    public List<Map<String, Object>> findMapList(String sql, Object... params) throws QueryException {
-        return DB.findMapList(sql, params);
-    }
-    
-    public List<Map<String, Object>> findMapListPage(String sql, int page, int pageSize, Object... params) throws QueryException {
-        return DB.findPage(sql, page, pageSize, params);
-    }
-    
-    public int delete(String sql, Object... params) throws UpdateException{
-        return DB.update(sql, params);
-    }
+	public M find(String sql, Object... params) throws QueryException {
+		if (Const.REDIS_IS_OPEN) {
+			return this.findByCache(sql, params);
+		}
+		return (M) DB.find(this.getClass(), sql, params);
+	}
 
-    public int update(String sql, Object... params) throws UpdateException {
-        int count = DB.update(sql, params);
-        return count;
-    }
-    /*----------------------------------无缓存直接查询数据库:E----------------------------------------*/
-    
-    
-    
-    /*----------------------------------缓存查询:S----------------------------------------*/
-    /**
-     * 通知清除缓存
-     */
-    public void updateNotice() {
-        // 清楚该表缓存
-        redis.delLike(this.getClass().getSimpleName() + "_");
-    }
+	public M findByPK(Serializable pk) throws QueryException {
+		String tableName = this.getClass().getAnnotation(Table.class).name();
+		String pkName = this.getClass().getAnnotation(Table.class).PK();
+		String sql = "select t.* from " + tableName + " t where t." + pkName + "=?";
+		if (Const.REDIS_IS_OPEN) {
+			return this.findByCache(sql, pk);
+		}
+		return (M) DB.find(this.getClass(), sql, pk);
+	}
 
-    /**
-     * 通知清除缓存
-     */
-    public void deleteNotice() {
-        // 清楚该表缓存
-        redis.delLike(this.getClass().getSimpleName() + "_");
-    }
+	public List<M> findList(String sql, Object... params) throws QueryException {
+		if (Const.REDIS_IS_OPEN) {
+			List<M> modelList = CollectionUtil.newArrayList();
+			String tableName = this.getClass().getAnnotation(Table.class).name();
+			String pkName = this.getClass().getAnnotation(Table.class).PK();
+			List<Serializable> pks = DB.findColumnList("select t." + pkName + " from " + tableName + " t");
+			String cacheSql = "select t.* from " + tableName + " t where t." + pkName + "=?";
+			for (Serializable pk : pks) {
+				M model = this.findByCache(cacheSql, pk);
+				modelList.add(model);
+			}
+			return modelList;
+		}
+		return (List<M>) DB.findList(this.getClass(), sql, params);
+	}
 
-    /**
-     * sql转key
-     * @param pageNumber
-     * @param pageSize
-     * @param sql
-     * @param paras
-     * @return
-     */
-    private String sql2key(Integer pageNumber, Integer pageSize, String sql, Object... paras) {
-        StringBuilder key = new StringBuilder(sql.replaceAll("\\?", "").replaceAll("\\s", ""));
-        if (null != pageNumber) {
-            key.append(pageNumber);
-        }
-        if (null != pageSize) {
-            key.append(pageSize);
-        }
-        if (null != paras && paras.length > 0) {
-            for (Object object : paras) {
-                if (null != object) {
-                    key.append(BaseKit.getObject(object).toString());
-                }
-            }
-        }
-        return DigestUtils.md5Hex(this.getClass().getSimpleName() + "_" + key.toString());
-    }
+	public Page<M> findListPage(int page, int pageSize, String sql, Object... params) throws QueryException {
+		return (Page<M>) DB.findListPage(this.getClass(), page, pageSize, sql, params);
+	}
 
-    public M findByCache(String sql, Object... paras) {
-        String key = sql2key(null, null, sql, paras);
-        return findByCache(key, sql, paras);
-    }
+	public List<Map<String, Object>> findMapList(String sql, Object... params) throws QueryException {
+		return DB.findMapList(sql, params);
+	}
 
-    public M findByCache(String key, String sql, Object... paras) {
-        M model = null;
-        if (redis.exists(key)) {
-            model = redis.get(key);
-        } else {
-            model = (M) DB.find(this.getClass(), sql, paras);
-            redis.set(key, model);
-        }
-        return model;
-    }
+	public List<Map<String, Object>> findMapListPage(String sql, int page, int pageSize, Object... params)
+			throws QueryException {
+		return DB.findPage(sql, page, pageSize, params);
+	}
 
-    public M findByCache(int timeout, String sql, Object... paras) {
-        List<M> result = findListByCache(timeout, sql, paras);
-        return result.size() > 0 ? result.get(0) : null;
-    }
+	public int delete(String sql, Object... params) throws UpdateException {
+		int count = DB.update(sql, params);
+		if (Const.REDIS_IS_OPEN) {
+			redis.delLike(this.getClass().getName() + ":");
+		}
+		return count;
+	}
 
-    public M findByCache(String key, int timeout, String sql, Object... paras) {
-        List<M> result = findListByCache(key, timeout, sql, paras);
-        return result.size() > 0 ? result.get(0) : null;
-    }
+	public int delete(String sql, Serializable pk, Object... params) throws UpdateException {
+		int count = DB.update(sql, params);
+		if (Const.REDIS_IS_OPEN) {
+			redis.del(this.getClass().getName() + ":" + pk);
+		}
+		return count;
+	}
 
-    public List<M> findListByCache(String sql, Object... paras) {
-        String key = sql2key(null, null, sql, paras);
-        return findListByCache(key, sql, paras);
-    }
+	public int deleteByPK(Serializable pk) throws UpdateException {
+		String tableName = this.getClass().getAnnotation(Table.class).name();
+		String pkName = this.getClass().getAnnotation(Table.class).PK();
+		String sql = "delete from " + tableName + " t where t." + pkName + "=?";
+		int count = DB.update(sql, pk);
+		if (Const.REDIS_IS_OPEN) {
+			if (Const.REDIS_IS_OPEN) {
+				redis.del(this.getClass().getName() + ":" + pk);
+			}
+		}
+		return count;
+	}
 
-    public List<M> findListByCache(String key, String sql, Object... paras) {
-        ArrayList<M> result = null;
-        if (redis.exists(key)) {
-            result = redis.get(key);
-        } else {
-            result = (ArrayList<M>) DB.findList(this.getClass(), sql, paras);
-            redis.set(key, result);
-        }
-        return result;
-    }
+	public int update(String sql, Object... params) throws UpdateException {
+		int count = DB.update(sql, params);
+		if (Const.REDIS_IS_OPEN) {
+			redis.delLike(this.getClass().getName() + ":");
+		}
+		return count;
+	}
 
-    public List<M> findListByCache(int timeout, String sql, Object... paras) {
-        String key = sql2key(null, null, sql, paras);
-        return findListByCache(key, timeout, sql, paras);
-    }
+	public int update(String sql, Serializable pk, Object... params) throws UpdateException {
+		int count = DB.update(sql, params);
+		if (Const.REDIS_IS_OPEN) {
+			redis.del(this.getClass().getName() + ":" + pk);
+		}
+		return count;
+	}
 
-    public List<M> findListByCache(String key, int timeout, String sql, Object... paras) {
-        ArrayList<M> result = null;
-        if (redis.exists(key)) {
-            result = redis.get(key);
-        } else {
-            result = (ArrayList<M>) DB.findList(this.getClass(), sql, paras);
-            redis.set(key, result);
-        }
-        return result;
-    }
+	/*----------------------------------缓存查询:S----------------------------------------*/
 
-    public List<M> findListByCache(String sql) {
-        return findListByCache(sql, NULL_PARA_ARRAY);
-    }
+	private M findByCache(String sql, Serializable pk) {
+		M model = null;
+		if (redis.exists(this.getClass().getName() + ":" + pk)) {
+			model = redis.get(this.getClass().getName() + ":" + pk);
+		} else {
+			model = (M) DB.find(this.getClass(), sql, pk);
+			redis.set(this.getClass().getName() + ":" + pk, model);
+		}
+		return model;
+	}
 
-    public List<M> findListByCache(String key, String sql) {
-        return findListByCache(key, sql, NULL_PARA_ARRAY);
-    }
-
-    public List<M> findListByCache(String key, int timeout, String sql) {
-        return findListByCache(key, timeout, sql, NULL_PARA_ARRAY);
-    }
-    /*----------------------------------缓存查询:E---------------------------------------*/
+	/*----------------------------------缓存查询:E---------------------------------------*/
 
 }
