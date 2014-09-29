@@ -10,7 +10,6 @@ import org.unique.common.tools.CollectionUtil;
 import org.unique.ioc.Container;
 import org.unique.ioc.impl.BeanFactory;
 import org.unique.ioc.impl.DefaultContainerImpl;
-import org.unique.plugin.cache.JedisCache;
 import org.unique.web.annotation.Path;
 import org.unique.web.handler.Handler;
 import org.unique.web.handler.impl.DefalutHandlerImpl;
@@ -145,8 +144,6 @@ public class Unique {
                 container.registBean(clazz);
             }
         }
-        //register jediscache class to container
-        container.registBean(JedisCache.class);
         // init wired
         container.initWired();
     }
