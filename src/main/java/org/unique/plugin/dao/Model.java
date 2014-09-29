@@ -130,7 +130,9 @@ public class Model<M extends Model<?>> implements Serializable {
 			model = redis.get(this.getClass().getName() + ":" + pk);
 		} else {
 			model = (M) DB.find(this.getClass(), sql, pk);
-			redis.set(this.getClass().getName() + ":" + pk, model);
+			if(null != model){
+				redis.set(this.getClass().getName() + ":" + pk, model);
+			}
 		}
 		return model;
 	}
