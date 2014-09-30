@@ -46,6 +46,10 @@ public class Page<T> {
 	 * 尾页
 	 */
 	private Integer last_page;
+	/**
+	 * 链接
+	 */
+	private String url;
 	/*
 	 * 固定导航数
 	 */
@@ -177,4 +181,12 @@ public class Page<T> {
 		this.navNum = navNum;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 }
