@@ -74,8 +74,8 @@ public class Page<T> {
 		this.setTotalCount(totleCount);
 
 		//总页数
-		this.setTotalPage((int) (totleCount / pageSize));
-
+		this.setTotalPage((int) ((totleCount + pageSize - 1) / pageSize));
+		
 		//起始位置
 		this.setStartIndex(Math.max(0, (this.page - 1) * pageSize));
 
