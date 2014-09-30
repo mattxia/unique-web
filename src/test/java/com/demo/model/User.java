@@ -63,5 +63,5 @@ public class User extends Model<User>{
     public void setStatus(int status) {
         this.status = status;
     }
-    
+
 }

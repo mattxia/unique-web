@@ -1,10 +1,12 @@
 package org.unique.plugin.dao;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import org.unique.common.tools.CollectionUtil;
+import org.unique.common.tools.StringUtils;
 import org.unique.ioc.impl.DefaultContainerImpl;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
@@ -21,8 +23,6 @@ import org.unique.web.core.Const;
 public class Model<M extends Model<?>> implements Serializable {
 
 	private static Cache redis;
-
-	public static Model<?> db;
 
 	static {
 		if (Const.REDIS_IS_OPEN) {
@@ -137,6 +137,32 @@ public class Model<M extends Model<?>> implements Serializable {
 		return model;
 	}
 
+	private M findByCache(String sql, Object... params) {
+		M model = (M) DB.find(this.getClass(), sql, params);
+		
+		try {
+			String pk = this.getClass().getAnnotation(Table.class).PK();
+			if(StringUtils.isBlank(pk)){
+				pk = "id";
+			}
+			Field field = this.getClass().getDeclaredField(pk);
+			field.setAccessible(true);
+			if(null != model && null != field.get(model)){
+				redis.set(this.getClass().getName() + ":" + field.get(model), model);
+			}
+			field.setAccessible(false);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return model;
+	}
+	
 	/*----------------------------------缓存查询:E---------------------------------------*/
 
 }

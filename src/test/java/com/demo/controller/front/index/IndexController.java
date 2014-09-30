@@ -68,8 +68,8 @@ public class IndexController extends Controller {
 	public void show() {
 		Integer uid = this.getParaToInt();
 		User user = userService.get(uid);
-		List<User> userList = userService.getList(null, 1, null);
-		boolean flag = userService.update(2, "qq", 1);
+//		List<User> userList = userService.getList(null, 1, null);
+//		boolean flag = userService.update(2, "qq", 1);
 		System.out.println("show：" + user.getLogin_name());
 	}
 }

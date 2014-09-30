@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User get(Integer uid) {
-		return User.db.findByPK(uid);
+		return User.db.find("select t.* from t_user t where t.uid = ?", uid);
 	}
 
 	@Override
