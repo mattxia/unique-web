@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.unique.common.tools.CollectionUtil;
 import org.unique.common.tools.StringUtils;
-import org.unique.ioc.impl.DefaultContainerImpl;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
 import org.unique.plugin.db.exception.QueryException;
@@ -26,8 +25,9 @@ public class Model<M extends Model<?>> implements Serializable {
 
 	static {
 		if (Const.REDIS_IS_OPEN) {
-			DefaultContainerImpl.single().registBean(JedisCache.class);
-			redis = (Cache) DefaultContainerImpl.single().getBean(JedisCache.class);
+			if(null == redis){
+				redis = new JedisCache();
+			}
 		}
 	}
 
@@ -120,6 +120,10 @@ public class Model<M extends Model<?>> implements Serializable {
 			redis.del(this.getClass().getName() + ":" + pk);
 		}
 		return count;
+	}
+	
+	public int insert(String sql, Object... params) throws UpdateException {
+		return DB.update(sql, params);
 	}
 
 	/*----------------------------------缓存查询:S----------------------------------------*/

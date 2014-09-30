@@ -89,7 +89,21 @@ public class SqlBase {
 		}
 		return this;
 	}
+	
+	public SqlBase isNull(String field){
+		if (StringUtils.isNotBlank(field)) {
+			this.whereMap.put(field,  " is null ");
+		}
+		return this;
+	}
 
+	public SqlBase isNotNull(String field){
+		if (StringUtils.isNotBlank(field)) {
+			this.whereMap.put(field,  " is not null ");
+		}
+		return this;
+	}
+	
 	public SqlBase like(String field, Object value) {
 		if (StringUtils.isNotBlank(field) && null != value) {
 			this.whereMap.put(field + " like ?", "%" + value + "%");
