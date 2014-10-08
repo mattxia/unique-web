@@ -19,3 +19,6 @@ Unique-Web为构建一个轻量级高性能web开发框架，部分功能未实�
 		patchca-plugin		|	多彩验证码插件	
 			
 		beetl				|	beetl等多种模板渲染引擎
+		
+		
+更多请看wiki：http://git.oschina.net/biezhi/unique-web/wikis/home
