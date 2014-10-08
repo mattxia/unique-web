@@ -38,27 +38,26 @@ public class ActionInvocation {
 
     public void invoke() {
     	try {
-    		if(interceptorList.size() == 0 || interceptorList.size() == pos){
-    			action.getMethod().invoke(controller, NULL_ARGS);
-    		} else{
-    			Interceptor inter = interceptorList.get(pos);
-    			pos++;
-    			if(inter instanceof AbstractInterceptor){
-    				AbstractInterceptor ab = (AbstractInterceptor)inter;
-    				ab.before(this);
-    				ab.intercept(this);
-    				ab.after(this);
-    			} else{
-    				inter.intercept(this);
-    			}
-    		}
-		} catch (InvocationTargetException e) {
-			Throwable cause = e.getTargetException();
-			if (cause instanceof RuntimeException)
-				throw (RuntimeException)cause;
-			throw new RuntimeException(e);
-		} catch (RuntimeException e) {
+			if(interceptorList.size() == 0 || interceptorList.size() == pos){
+				action.getMethod().invoke(controller, NULL_ARGS);
+			} else{
+				Interceptor inter = interceptorList.get(pos);
+				pos++;
+				if(inter instanceof AbstractInterceptor){
+					AbstractInterceptor ab = (AbstractInterceptor)inter;
+					ab.before(this);
+					ab.intercept(this);
+					ab.after(this);
+				} else{
+					inter.intercept(this);
+				}
+			}
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e.getCause());
+		} catch (IllegalArgumentException e) {
 			throw e;
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e.getCause());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
