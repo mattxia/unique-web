@@ -122,15 +122,7 @@ public class Model<M extends Model<?>> implements Serializable {
 		return count;
 	}
 
-	public int update(String sql, Serializable pk) throws UpdateException {
-		int count = DB.update(sql, pk);
-		if (Const.REDIS_IS_OPEN) {
-			redis.del(this.getClass().getName() + ":" + pk);
-		}
-		return count;
-	}
-	
-	public int update(String sql, Serializable pk, Object... params) throws UpdateException {
+	public int updateByPK(String sql, Serializable pk, Object... params) throws UpdateException {
 		int count = DB.update(sql, params);
 		if (Const.REDIS_IS_OPEN) {
 			redis.del(this.getClass().getName() + ":" + pk);
