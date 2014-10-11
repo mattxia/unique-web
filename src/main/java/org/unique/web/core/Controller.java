@@ -380,13 +380,13 @@ public abstract class Controller {
 	 * get url parameter
 	 */
 	public String getPara() {
-		if ("".equals(urlPara)) { // urlPara maybe is "" see
-			urlPara = null;
+		if (null == urlPara || urlPara.length == 0) {
+			return null;
 		}
-		return urlPara[0];
+		return urlPara[0].toString();
 	}
 
-	public String[] getUrlPara() {
+	public Object[] getUrlPara() {
 		return urlPara;
 	}
 
@@ -396,7 +396,7 @@ public abstract class Controller {
 	public String getPara(int index) {
 		if (index < 0)
 			return getPara();
-		return urlPara[index];
+		return urlPara[index].toString();
 	}
 
 	/**

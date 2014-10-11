@@ -2,7 +2,6 @@ package org.unique.web.core;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.unique.common.tools.ClassHelper;
@@ -15,7 +14,6 @@ import org.unique.web.handler.Handler;
 import org.unique.web.handler.impl.DefalutHandlerImpl;
 import org.unique.web.interceptor.InterceptorFactory;
 import org.unique.web.route.Route;
-import org.unique.web.route.RouteMatcher;
 
 /**
  * unique
@@ -96,11 +94,10 @@ public class Unique {
     }
 
     private void initActionMapping() {
-    	Map<RouteMatcher, Route> mapping = actionMapping.buildActionMapping();
-    	Set<RouteMatcher> matcherSet = mapping.keySet();
-    	for(RouteMatcher r : matcherSet){
-    		Pattern p = r.getPattern();
-    		logger.info("action ：" + p.toString());
+    	Map<String, Route> mapping = actionMapping.buildActionMapping();
+    	Set<String> matcherSet = mapping.keySet();
+    	for(String r : matcherSet){
+    		logger.info("action ：" + r);
     	}
     	logger.info("action size ：" + matcherSet.size());
     }

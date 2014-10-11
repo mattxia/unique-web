@@ -3,7 +3,6 @@ package com.demo.controller.front.blog;
 import org.apache.log4j.Logger;
 import org.unique.ioc.annotation.Autowired;
 import org.unique.web.annotation.Action;
-import org.unique.web.annotation.Intercept;
 import org.unique.web.annotation.Path;
 import org.unique.web.core.Controller;
 
@@ -22,9 +21,11 @@ public class DemoRest extends Controller{
 	    this.render("index");
 	}
 	
-	@Action("/demo/blog/{id}")
+	@Action("/demo/blog/{1}/{2}")
 	public void blog(){
 	    logger.info(this.getPara());
+	    System.out.println("{1} : " + this.getPara(0));
+	    System.out.println("{2} : " + this.getPara(1));
 		this.setAttr("blog_id", this.getPara());
 		this.render("blog");
 	}

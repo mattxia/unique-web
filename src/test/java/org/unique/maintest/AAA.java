@@ -1,20 +1,22 @@
 package org.unique.maintest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import org.unique.common.tools.DateUtil;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AAA {
 
 	public static void main(String[] args) {
-		Object[] a = {1,2,3};
-		List<Object> list = new ArrayList<Object>(a.length + 2);
-		list.addAll(Arrays.asList(a));
-		list.add(333);
-		list.add(334);
-		System.out.println(list);
-		System.out.println(DateUtil.getCurrentTime());
+		String url = "/admin/pic/3/2/2";
+		Pattern p = Pattern.compile("[/\\w]?[\\d]+");
+		Matcher m = p.matcher(url);
+		List<String> pp = new ArrayList<String>();
+		while(m.find()){
+			String mg = m.group().replaceAll("/", "");
+			url = url.replace(mg, "{#}");
+			System.out.println(Integer.valueOf(mg));
+		}
+		System.out.println(url);
 	}
 }

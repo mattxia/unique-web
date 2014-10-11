@@ -8,7 +8,6 @@ import org.unique.common.tools.CollectionUtil;
 import org.unique.ioc.annotation.Autowired;
 import org.unique.plugin.tx.annotation.Transaction;
 import org.unique.web.annotation.Action;
-import org.unique.web.annotation.Intercept;
 import org.unique.web.annotation.Path;
 import org.unique.web.core.Controller;
 
@@ -54,7 +53,7 @@ public class IndexController extends Controller {
         render("users");
     }
 
-    @Action(value = "books/{id}")
+    @Action(value = "books/{#}")
     public void books() {
         Integer uid = this.getParaToInt();
         logger.info(uid);

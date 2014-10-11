@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
  * @date:2014年8月22日
  * @version:1.0
  */
+@Deprecated
 public final class RouteMatcher {
 
 	static final String[] EMPTY_STRINGS = new String[0];

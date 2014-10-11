@@ -3,9 +3,12 @@ package org.unique.web.core;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.unique.common.tools.CollectionUtil;
@@ -13,7 +16,6 @@ import org.unique.web.annotation.Action;
 import org.unique.web.annotation.Action.HttpMethod;
 import org.unique.web.annotation.Path;
 import org.unique.web.route.Route;
-import org.unique.web.route.RouteMatcher;
 
 /**
  * actionMapping
@@ -26,7 +28,7 @@ public class ActionMapping {
     private static Logger logger = Logger.getLogger(ActionMapping.class);
 
     // route mapping
-    private Map<RouteMatcher, Route> urlMapping = CollectionUtil.newHashMap();
+    private Map<String, Route> urlMapping = CollectionUtil.newHashMap();
 
     // private static Logger log = Logger.getLogger(ActionMapping.class);
     private static final String SLASH = "/";
@@ -59,7 +61,7 @@ public class ActionMapping {
     /**
      * build routing mapping
      */
-    public Map<RouteMatcher, Route> buildActionMapping() {
+    public Map<String, Route> buildActionMapping() {
         urlMapping.clear();
 
         // to filter method
@@ -81,17 +83,11 @@ public class ActionMapping {
             }
             // for method
             for (Method method : methods) {
-            	// non-public not as action to deal with
-            	if(method.getModifiers() != Modifier.PUBLIC){
-            		continue;
-            	}
                 String methodName = method.getName();
                 // filter the top controller method
-                if (!excludedMethodName.contains(methodName) && method.getParameterTypes().length == 0) {
-                	
+                if (!excludedMethodName.contains(methodName) && method.getParameterTypes().length == 0 && method.getModifiers() == Modifier.PUBLIC) {
                     // get action
                     Action ak = method.getAnnotation(Action.class);
-                    RouteMatcher mac = null;
                     if (null != ak) {
                         String action = ak.value().trim();
                         HttpMethod methodType = (null == ak.method()) ? HttpMethod.ALL : ak.method();
@@ -108,14 +104,11 @@ public class ActionMapping {
                             action = path.equals("/") ? path + action : path + "/" + action;
                         }
                         Route route = new Route(controller, path, action, method, methodType, path);
-
-                        mac = new RouteMatcher(action);
-                        urlMapping.put(mac, route);
+                        urlMapping.put(action, route);
                     } else if (methodName.equals("index")) {
                         String action = path.equals(SLASH) ? SLASH + methodName : path + SLASH + methodName;
                         Route route = new Route(controller, path, action, method, HttpMethod.ALL, path);
-                        mac = new RouteMatcher(action);
-                        route = urlMapping.put(mac, route);
+                        route = urlMapping.put(action, route);
                         if (null != route) {
                             warnning(route.getAction(), route.getControllerClass(), route.getMethod());
                         }
@@ -126,8 +119,7 @@ public class ActionMapping {
                             continue;
                         }
                         Route route = new Route(controller, path, action, method, HttpMethod.ALL, path);
-                        mac = new RouteMatcher(action);
-                        urlMapping.put(mac, route);
+                        urlMapping.put(action, route);
                     }
                 }
             }
@@ -149,14 +141,28 @@ public class ActionMapping {
             if (url.equals("") || url.equals("/") || url.equals("/index/") ) {
                 url = "/index";
             }
-            // parse url parameters
-            for (RouteMatcher matcher : this.urlMapping.keySet()) {
-                String[] params = matcher.getUrlParameters(url);
-                if (params != null) {
-                    route = this.urlMapping.get(matcher);
-                    route.setParams(params);
-                    break;
+            route = urlMapping.get(url);
+            // 取参数
+            if(null == route){
+        		Pattern p = Pattern.compile("[/\\w]?[\\d]+");
+        		Matcher m = p.matcher(url);
+        		List<String> paramList = CollectionUtil.newArrayList();
+        		int pos = 1;
+        		while(m.find()){
+        			String mg = m.group().replaceAll("/", "");
+        			url = url.replaceFirst(mg, "{"+pos+"}");
+        			paramList.add(mg);
+        			pos++;
+        		}
+            	route = urlMapping.get(url);
+            	if(null != route){
+            		String[] params = new String[paramList.size()];
+            		route.setParams(paramList.toArray(params));
                 }
+            }
+            // 取index
+            if(null == route){
+            	route = urlMapping.get(url + "/index");
             }
         }
         return route;
