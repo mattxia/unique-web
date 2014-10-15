@@ -319,7 +319,7 @@ public class FileUtil {
         if (filename == null) {
             return null;
         }
-        int index = filename.indexOf(".");
+        int index = filename.lastIndexOf(".");
         if (index == -1) {
             return "";
         } else {

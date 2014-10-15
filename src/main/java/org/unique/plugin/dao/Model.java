@@ -64,12 +64,32 @@ public class Model<M extends Model<?>> implements Serializable {
 		return (List<M>) DB.findList(this.getClass(), sql, params);
 	}
 
-	public Page<M> findListPage(int page, int pageSize, String sql, Object... params) throws QueryException {
+	public Page<M> findListPage(final int page, final int pageSize, final String sql, Object... params) throws QueryException {
 		return (Page<M>) DB.findListPage(this.getClass(), page, pageSize, sql, params);
 	}
 
-	public List<Map<String, Object>> findMapList(String sql, Object... params) throws QueryException {
+	public List<Map<String, Object>> findMapList(final String sql, Object... params) throws QueryException {
 		return DB.findMapList(sql, params);
+	}
+	
+	public <T> T findColumn(final String sql, Object... params){
+		return DB.findColumn(sql, params);
+	}
+	
+	public <T> Map<T, Map<String, Object>> findColumnMap(final String column, final String sql, Object... params){
+		return DB.findColumnMap(column, sql, params);
+	}
+	
+	public <T> List<T> findColumnList(final String sql, Object... params){
+		return DB.findColumnList(sql, params);
+	}
+	
+	public Object[] findArray(final String sql, Object... params){
+		return DB.findArray(sql, params);
+	}
+	
+	public List<Object[]> findArrayList(final String sql, Object... params){
+		return DB.findArrayList(sql, params);
 	}
 
 	public List<Map<String, Object>> findMapListPage(String sql, int page, int pageSize, Object... params)

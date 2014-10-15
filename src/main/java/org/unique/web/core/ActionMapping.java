@@ -134,6 +134,9 @@ public class ActionMapping {
     }
 
     public Route getRoute(String url) {
+    	if(url.endsWith("/") && url.length() > 1){
+    		url = url.substring(0, url.length() - 1);
+        }
         Route route = urlMapping.get(url);
         if (route != null) {
             return route;
