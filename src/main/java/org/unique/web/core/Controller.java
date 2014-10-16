@@ -467,6 +467,10 @@ public abstract class Controller {
 		return toLong(getPara(), null);
 	}
 
+	public void render(final Render render) {
+		this.render = render;
+	}
+	
 	public void render(final String view) {
 		this.render = renderFactory.getRender(view);
 	}

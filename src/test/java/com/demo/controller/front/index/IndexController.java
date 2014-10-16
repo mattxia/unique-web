@@ -1,15 +1,13 @@
 package com.demo.controller.front.index;
 
-import java.io.IOException;
-
 import org.unique.common.tools.JSONUtil;
 import org.unique.ioc.annotation.Autowired;
 import org.unique.plugin.cache.Cache;
 import org.unique.plugin.cache.JedisCache;
 import org.unique.plugin.dao.Page;
-import org.unique.plugin.patchca.PatchcaPlugin;
 import org.unique.web.annotation.Path;
 import org.unique.web.core.Controller;
+import org.unique.web.render.impl.PatchcaRender;
 
 import com.demo.model.User;
 import com.demo.service.UserService;
@@ -56,12 +54,7 @@ public class IndexController extends Controller {
 	}
 
 	public void code() {
-		try {
-			PatchcaPlugin.createCode(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.render(new PatchcaRender());
 	}
 	
 	@org.unique.web.annotation.Action("ff/show/{mid}")
