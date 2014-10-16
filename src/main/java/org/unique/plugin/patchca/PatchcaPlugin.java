@@ -35,7 +35,6 @@ public class PatchcaPlugin {
 
     static {
         cs.setColorFactory(new ColorFactory() {
-
             @Override
             public Color getColor(int x) {
                 int[] c = new int[3];
@@ -57,7 +56,7 @@ public class PatchcaPlugin {
         cs.setWordFactory(wf);
     }
 
-    public static void crimg(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static String createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         switch (random.nextInt(5)) {
         case 0:
             cs.setFilterFactory(new CurvesRippleFilterFactory(cs.getColorFactory()));
@@ -79,13 +78,7 @@ public class PatchcaPlugin {
         if (session == null) {
             session = request.getSession();
         }
-        setResponseHeaders(response);
-        String token = EncoderHelper.getChallangeAndWriteImage(cs, "png", response.getOutputStream());
-        session.setAttribute(Const.SESSION_CAPTCH_TOKEN, token);
-        logger.debug("当前的SessionID=" + session.getId() + "，验证码=" + token);
-    }
-
-    protected static void setResponseHeaders(HttpServletResponse response) {
+        
         response.setContentType("image/png");
         response.setHeader("Cache-Control", "no-cache, no-store");
         response.setHeader("Pragma", "no-cache");
@@ -93,5 +86,14 @@ public class PatchcaPlugin {
         response.setDateHeader("Last-Modified", time);
         response.setDateHeader("Date", time);
         response.setDateHeader("Expires", time);
+        
+        String token = null;
+		token = EncoderHelper.getChallangeAndWriteImage(cs, "png", response.getOutputStream());
+		if(null != token){
+			session.setAttribute(Const.SESSION_CAPTCH_TOKEN, token);
+		}
+		logger.debug("当前的SessionID=" + session.getId() + "，验证码=" + token);
+        return token;
     }
+    
 }

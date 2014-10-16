@@ -437,6 +437,14 @@ public class FileUtil {
     public static boolean exists(String filePath) {
         return new File(filePath).exists();
     }
+    
+    public static boolean isFile(String filePath) {
+        return new File(filePath).exists() && new File(filePath).isFile();
+    }
+    
+    public static boolean isDir(String filePath) {
+        return new File(filePath).exists() && new File(filePath).isDirectory();
+    }
 
     /**
      * 获取文件后缀

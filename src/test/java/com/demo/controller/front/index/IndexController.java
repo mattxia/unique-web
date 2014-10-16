@@ -1,7 +1,6 @@
 package com.demo.controller.front.index;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.unique.common.tools.JSONUtil;
 import org.unique.ioc.annotation.Autowired;
@@ -58,8 +57,9 @@ public class IndexController extends Controller {
 
 	public void code() {
 		try {
-			PatchcaPlugin.crimg(request, response);
+			PatchcaPlugin.createCode(request, response);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
